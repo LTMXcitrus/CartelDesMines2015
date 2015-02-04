@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blanc">#FFFFFF</color>
+    <color name="noir">#000000</color>
+    <color name="bleu">#349ceb</color>
+    <color name="gris">#F2F2F2</color>
+    <color name="blue_bright">#33B5E5</color>
+    <color name="bleu_cartel">#00879D</color>
+    <color name="jaune_cartel">#F0D70B</color>
+    <color name="rouge_cartel">#D10B0C</color>
+    <color name="vert_cartel">#15A02D</color>
+    
+</resources>

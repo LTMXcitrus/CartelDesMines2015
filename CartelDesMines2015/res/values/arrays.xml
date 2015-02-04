@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="titles">
+        <item>Bienvenue</item>
+        <item>A propos</item>
+        <item>Sports</item>
+        <item>Animation</item>
+    </string-array>
+    
+    <string-array name="drawer_sections">
+        <item>Cartel 2015</item>
+        <item>Carte</item>
+        <item>Planning</item>
+        <item>Notifications</item>
+    </string-array>
+    
+</resources>

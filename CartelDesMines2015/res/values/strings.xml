@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CartelDesMines2015</string>
+    <string name="cartel2015">Cartel 2015</string>
+    <string name="bienvenue">Bienvenue à \nMines Nantes</string>
+    <string name="aproposcartel">A propos du </string>
+    <string name="cartel">Cartel</string>
+    <string name="lecartelcest">Le Cartel c\'est: \n\t\t- 4 jours \n\t\t- 15 sports \n\t\t- 12 délégations \n\t\t- 1300 participants \nUne équipe de 40 étudiants travaille au
+        		 quotidien pour rendre cet événement sportif unique et spectaculaire !</string>
+    <string name="carte">Carte</string>
+    <string name="planning">Planning</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_search_map">Rechercher un lieu</string>
+    <string name="sports">Sports</string>
+    <string name="repas">Repas</string>
+    <string name="logements">Logements</string>
+    <string name="emptylist">Pas de résultats</string>
+    <string name="info_window_go_text"><u>J\'y vais !</u></string>
+
+</resources>
