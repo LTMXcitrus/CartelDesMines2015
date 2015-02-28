@@ -1,18 +1,18 @@
 package cartel.mines.nantes2015;
 
-import java.lang.Thread.State;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import loaders.MarkerLoader;
 import tools.AsyncListener;
-import tools.MarkerLoader;
-import tools.MarkerSearchListAdapter;
 import tools.MyInfoWindowAdapterListener;
 import tools.SearchInMarkers;
+import adapters.MarkerSearchListAdapter;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
@@ -54,17 +54,19 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 	private Button sportsPoiVisibility;
 	private Button repasPoiVisibity;
 	private Button logementsPoiVisibility;
-	
+
 	private TextView emptyList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.carte_layout);
+		
+		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
 
 		MarkerLoader getMarkers = null;
 		try {
-			getMarkers = new MarkerLoader(new URL("http://1-dot-inlaid-span-809.appspot.com/"), this);
+			getMarkers = new MarkerLoader(new URL("http://1-dot-inlaid-span-809.appspot.com/pointsofinterest"), this);
 		} catch (MalformedURLException e) {
 			System.out.println(e);
 		}
@@ -80,30 +82,12 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 		repasPoiVisibity.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.REPAS));
 		logementsPoiVisibility = (Button) findViewById(R.id.logementsvisibility);
 		logementsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.LOGEMENT));
-		
+
 		emptyList = (TextView) findViewById(R.id.empty_list_item_search_list);
 		emptyList.setVisibility(View.GONE);
 
 		markerSearchResultsList =(ListView) findViewById(R.id.markerSearchResultsList);
 		markerSearchResultsList.setVisibility(View.GONE);
-
-		while(getMarkers.getState()!=State.TERMINATED){	}
-		addMarkersToMap();
-		markerSearchResultsList.setAdapter(new MarkerSearchListAdapter(this, R.layout.marker_search_item, markersOptions));
-		
-		markerSearchResultsList.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				markerSearchResultsList.setVisibility(View.GONE);
-				Marker marker = markers.get(suggestions.get(position));
-				map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 14));
-				marker.showInfoWindow();
-			}
-		});
-
-		MyInfoWindowAdapterListener adapterListener = new MyInfoWindowAdapterListener(this);
-		map.setInfoWindowAdapter(adapterListener);
-		map.setOnInfoWindowClickListener(adapterListener);	
 	}
 
 
@@ -112,6 +96,30 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 		this.markersOptions=markers;
 		this.markersQueryResources=markersQueryResources;
 		this.types=types;
+		sportsPoiVisibility.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				addMarkersToMap();
+				markerSearchResultsList.setAdapter(new MarkerSearchListAdapter(Carte.this, R.layout.marker_search_item, markersOptions));
+
+				markerSearchResultsList.setOnItemClickListener(new OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						markerSearchResultsList.setVisibility(View.GONE);
+						Marker marker = Carte.this.markers.get(suggestions.get(position));
+						map.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 14));
+						marker.showInfoWindow();
+					}
+				});
+
+				MyInfoWindowAdapterListener adapterListener = new MyInfoWindowAdapterListener(Carte.this);
+				map.setInfoWindowAdapter(adapterListener);
+				map.setOnInfoWindowClickListener(adapterListener);
+				invalidateOptionsMenu();
+			}
+		});
+		
 	}
 	/**
 	 * Add the Markers from markers ArrayList to the map
@@ -134,7 +142,7 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 	}
 	/**
 	 * 
-	 * @param type  \the type of markers among SPORT, REPAS, LOGEMENT
+	 * @param type  the type of markers among SPORT, REPAS, LOGEMENT
 	 * @param visible
 	 */
 	public void setMarkersVisibility(String type, boolean visible){
@@ -263,5 +271,4 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 		}
 
 	}
-
 }

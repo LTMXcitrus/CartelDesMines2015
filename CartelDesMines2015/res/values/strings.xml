@@ -20,5 +20,9 @@
     <string name="logements">Logements</string>
     <string name="emptylist">Pas de résultats</string>
     <string name="info_window_go_text"><u>J\'y vais !</u></string>
+    <string name="no_file_to_upload_text">Aucun fichier sélectionné!</string>
+    <string name="choose_file_to_upload">Mes photos</string>
+    <string name="take_picture_to_upload">Appareil Photo</string>
+    <string name="no_match_yet">Pas encore de résultat pour ce sport!</string>
 
 </resources>

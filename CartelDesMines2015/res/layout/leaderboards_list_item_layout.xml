@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/classement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="1"
+        android:textColor="@color/vert_cartel"
+        android:textSize="35sp" />
+
+    <TextView
+        android:id="@+id/ville"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_toRightOf="@+id/classement"
+        android:padding="3dp"
+        android:text="Nantes"
+        android:textSize="25sp" />
+
+    <TextView
+        android:id="@+id/points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:padding="3dp"
+        android:text="48 PTS"
+        android:textColor="@color/vert_cartel"
+        android:textSize="35sp" />
+
+</RelativeLayout>

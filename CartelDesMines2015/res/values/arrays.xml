@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="titles">
+    <string-array name="titles_vitrine">
         <item>Bienvenue</item>
         <item>A propos</item>
         <item>Sports</item>
@@ -8,10 +8,27 @@
     </string-array>
     
     <string-array name="drawer_sections">
-        <item>Cartel 2015</item>
+        <item>CARTEL 2015</item>
+        <item>Nantes</item>
         <item>Carte</item>
         <item>Planning</item>
-        <item>Notifications</item>
+        <item>RESULTATS</item>
+        <item>En Continu</item>
+   		<item>Par Sport</item>
+        <item>Classement</item>
+        <item>NEWS</item>
+        <item>Actualités</item>
+        <item>Photos</item>
+        <item>Partager mes photos</item>
     </string-array>
+    
+    <string-array name="dates">
+        <item>Jour 1</item>
+        <item>Jour 2</item>
+        <item>Jour 3</item>
+        <item>Jour 4</item>
+    </string-array>
+    
+    
     
 </resources>

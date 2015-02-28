@@ -1,21 +1,22 @@
-package tools;
+package loaders;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import tools.AsyncListener;
 import android.location.Location;
 
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -39,15 +40,11 @@ public class MarkerLoader extends Thread{
 			HashMap<Integer,String> markersQueryResources =new HashMap<Integer,String>();
 			ArrayList<String> types = new ArrayList<String>();
 
-			HttpURLConnection urlConnection = (HttpURLConnection) urlCible.openConnection();
-			InputStream in = urlConnection.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			String result, line = reader.readLine();
-			result  = line;
-			while((line=reader.readLine())!=null){
-				result+=line;
-			}
-			JSONObject service = new JSONObject(result);
+			HttpClient client = new DefaultHttpClient();
+			HttpGet get = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/pointsofinterest");
+			HttpResponse r = client.execute(get);
+			String json = EntityUtils.toString(r.getEntity());
+			JSONObject service = new JSONObject(json);
 			JSONArray sport = service.getJSONArray("sport");
 
 

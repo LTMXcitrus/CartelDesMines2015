@@ -1,6 +1,6 @@
 package cartel.mines.nantes2015;
 
-import tools.NavigationDrawerAdapter;
+import adapters.NavigationDrawerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -60,6 +60,7 @@ public class NavigationDrawerFragment extends Fragment {
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
+	private NavigationDrawerAdapter adapter;
 
 	public NavigationDrawerFragment() {
 	}
@@ -106,8 +107,8 @@ public class NavigationDrawerFragment extends Fragment {
 						selectItem(position);
 					}
 				});
-		mDrawerListView.setAdapter(new NavigationDrawerAdapter(
-				getActivity(), R.layout.navigation_drawer_row, getResources().getStringArray(R.array.drawer_sections)));
+		adapter = new NavigationDrawerAdapter(getActivity(), R.layout.navigation_drawer_row, getResources().getStringArray(R.array.drawer_sections));
+		mDrawerListView.setAdapter(adapter);
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		return mDrawerListView;
 	}
@@ -217,6 +218,9 @@ public class NavigationDrawerFragment extends Fragment {
 		if (mCallbacks != null) {
 			mCallbacks.onNavigationDrawerItemSelected(position);
 		}
+		if(adapter!=null){
+			adapter.setSelectedRow(position);
+		}
 	}
 
 	@Override
@@ -268,11 +272,6 @@ public class NavigationDrawerFragment extends Fragment {
 			return true;
 		}
 
-		if (item.getItemId() == R.id.action_example) {
-			Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT)
-					.show();
-			return true;
-		}
 
 		return super.onOptionsItemSelected(item);
 	}

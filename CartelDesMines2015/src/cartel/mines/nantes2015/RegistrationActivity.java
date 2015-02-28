@@ -1,7 +1,17 @@
 package cartel.mines.nantes2015;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -10,22 +20,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-public class NotificationDisplay extends Activity{
-	
+public class RegistrationActivity extends Activity{
+
 	String SENDER_ID = "176135343380";
 
 	public static final String EXTRA_MESSAGE = "message";
@@ -33,14 +39,7 @@ public class NotificationDisplay extends Activity{
 	private static final String PROPERTY_APP_VERSION = "appVersion";
 	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-
-	private String mail ="";
-	private EditText mailInput;
-	private Button send;
-	private TextView title;
-	private TextView content;
-
-	static final String TAG = "GCMDemo";
+	static final String TAG = "Cartel2015";
 	TextView mDisplay;
 	GoogleCloudMessaging gcm;
 	AtomicInteger msgId = new AtomicInteger();
@@ -48,36 +47,16 @@ public class NotificationDisplay extends Activity{
 	Context context;
 
 	String regid;
-
 	
+	TextView erreur;
 
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.notification_display);
-
 		
-
-		send =(Button) findViewById(R.id.pushsend);
-		send.setEnabled(false);
-		mailInput=(EditText) findViewById(R.id.mailinput);
-		title = (TextView) findViewById(R.id.pushtitle);
-		content = (TextView) findViewById(R.id.pushcontent);
-		mDisplay = (TextView) findViewById(R.id.displaykey);
-		
-		String titleText = "";
-		String contentText = "";
-		
-		Intent intent =this.getIntent();
-		Bundle extras= intent.getExtras();
-		if(extras.containsKey("title")){
-			titleText = extras.getString("title");
-			contentText = extras.getString("msg");
-		}
-		
-		title.setText(titleText);
-		content.setText(contentText);
+		erreur  = (TextView) findViewById(R.id.erreur);
 
 		context = getApplicationContext();
 
@@ -90,31 +69,14 @@ public class NotificationDisplay extends Activity{
 			if (regid.isEmpty()) {
 				RegisterInBackground rIB = new RegisterInBackground();
 				rIB.execute();
-
 			}
-			else{
-				mDisplay.setText(regid);
-				send.setEnabled(true);
-				send.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						mail = mailInput.getText().toString();
-						Intent intent = new Intent(Intent.ACTION_SENDTO);
-						intent.setData(Uri.parse("mailto:"+mail)); // only email apps should handle this
-						intent.putExtra(Intent.EXTRA_EMAIL, mail);
-						intent.putExtra(Intent.EXTRA_TEXT, regid);
-						if (intent.resolveActivity(getPackageManager()) != null) {
-							startActivity(intent);
-						}
-					}
-				});
-
-
-			}
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			prefs.edit().putBoolean("registered", true).commit();
+			startActivity(new Intent(this,Accueil.class));
 		} else {
 			Log.i(TAG, "No valid Google Play Services APK found.");
+			erreur.setText("No valid Google Play Services APK found.");
 		}
-
 	}
 
 	@SuppressLint("NewApi")
@@ -140,11 +102,9 @@ public class NotificationDisplay extends Activity{
 	private SharedPreferences getGCMPreferences(Context context) {
 		// This sample app persists the registration ID in shared preferences, but
 		// how you store the regID in your app is up to you.
-		return getSharedPreferences(NotificationDisplay.class.getSimpleName(),
+		return getSharedPreferences(RegistrationActivity.class.getSimpleName(),
 				Context.MODE_PRIVATE);
 	}
-
-
 
 	private boolean checkPlayServices() {
 		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
@@ -182,8 +142,17 @@ public class NotificationDisplay extends Activity{
 		editor.commit();
 	}
 
-	private void sendRegistrationIdToBackend() {
-		// Send RegistrationId to your server
+	private void sendRegistrationIdToBackend() throws ClientProtocolException, IOException {
+		String url = "http://1-dot-inlaid-span-809.appspot.com/registration";
+		HttpClient client = new DefaultHttpClient();
+
+		HttpPost post = new HttpPost(url);
+
+		List<NameValuePair> liste = new ArrayList<NameValuePair>(6);
+		liste.add(new BasicNameValuePair("regId", regid));
+		post.setEntity(new UrlEncodedFormEntity(liste, "UTF-8"));
+
+		client.execute(post);
 	}
 
 	private class RegisterInBackground extends AsyncTask<Void, Void, String>{
@@ -191,7 +160,6 @@ public class NotificationDisplay extends Activity{
 		protected String doInBackground(Void... params) {
 			String msg = "";
 			try {
-				System.out.println("Je suis passé par l'asynctask");
 				if (gcm == null) {
 					gcm = GoogleCloudMessaging.getInstance(context);
 				}
@@ -218,26 +186,9 @@ public class NotificationDisplay extends Activity{
 			}
 			return msg;
 		}
-		protected void onPostExecute(String msg) {
-			mDisplay.append(msg + "\n");
-			send.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent intent = new Intent(Intent.ACTION_SENDTO);
-					intent.setData(Uri.parse("mailto:"+"mattcitron45140@gmail.com")); // only email apps should handle this
-					intent.putExtra(Intent.EXTRA_EMAIL, "mattcitron45140@gmail.com");
-					intent.putExtra(Intent.EXTRA_TEXT, regid);
-					if (intent.resolveActivity(getPackageManager()) != null) {
-						startActivity(intent);
-					}
-				}
-			});
-
-			send.setEnabled(true);
-		}
 
 	}
-	
+
 
 
 }

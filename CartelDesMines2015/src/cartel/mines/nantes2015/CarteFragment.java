@@ -6,10 +6,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import loaders.MarkerLoader;
 import tools.AsyncListener;
-import tools.MarkerLoader;
-import tools.MarkerSearchListAdapter;
 import tools.MyInfoWindowAdapterListener;
+import adapters.MarkerSearchListAdapter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

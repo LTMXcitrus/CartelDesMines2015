@@ -13,7 +13,7 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import cartel.mines.nantes2015.Accueil;
-import cartel.mines.nantes2015.NotificationDisplay;
+import cartel.mines.nantes2015.RegistrationActivity;
 import cartel.mines.nantes2015.R;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -79,7 +79,7 @@ public class GcmIntentService extends IntentService {
 
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 				new Intent(this, Accueil.class), 0);
-		Intent intent =new Intent(this,NotificationDisplay.class);
+		Intent intent =new Intent(this,RegistrationActivity.class);
 		Bundle extras = new Bundle();
 		extras.putString("title", title);
 		extras.putString("msg", msg);

@@ -39,7 +39,6 @@ public class FragmentNantes extends Fragment {
 		int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 		View rootView=inflater.inflate(layouts[sectionNumber], container,
 				false);
-		rootView.findViewById(R.id.linearlayout);
 		return rootView;
 	}
 }

@@ -1,16 +1,21 @@
 package cartel.mines.nantes2015;
 
-import com.google.android.gms.identity.intents.AddressConstants.Extras;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,9 +24,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-public class Accueil extends ActionBarActivity implements
-									NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class Accueil extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, OnBackStackChangedListener{
 
+
+	private static final int CARTEL2015=0;
+	private static final int VITRINE=1;
+	private static final int CARTE=2;
+	private static final int PLANNING=3;
+	private static final int RESULTATS=4;
+	private static final int MATCHS=5;
+	private static final int PAR_SPORT=6;
+	private static final int CLASSEMENT=7;
+	private static final int NEWS=8;
+	private static final int ACTUALITES=9;
+	private static final int PICTURES=10;
+	private static final int MEDIASHARE=11;
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -30,7 +47,7 @@ public class Accueil extends ActionBarActivity implements
 
 	FrameLayout container;
 
-	ViewPager mViewPager;
+	ViewPager viewPagerVitrine;
 	SectionsPagerAdapter mSectionsPagerAdapter;
 
 	/**
@@ -39,23 +56,38 @@ public class Accueil extends ActionBarActivity implements
 	 */
 	private CharSequence mTitle;
 
+
+
+	ActionBar actionBar;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.accueil);
+		if(!isRegistered()){
+			startActivity(new Intent(this,RegistrationActivity.class));
+		}
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		//Listen for changes in the back stack
+		fragmentManager.addOnBackStackChangedListener(this);
+		//Handle when activity is recreated like on orientation Change
+		shouldDisplayHomeUp();
+
+		actionBar = getSupportActionBar();
+		setActionBarColorFromId(R.color.bleu_cartel);
+
+
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager());
+		mSectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager);
 
-		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
+		// Set up the ViewPager vitrine with the sections adapter.
+		viewPagerVitrine = (ViewPager) findViewById(R.id.pager_vitrine);
+		viewPagerVitrine.setAdapter(mSectionsPagerAdapter);
 		container =(FrameLayout) findViewById(R.id.container);
 
-		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.navigation_drawer);
+		mNavigationDrawerFragment = (NavigationDrawerFragment) fragmentManager.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
 
 		// Set up the drawer.
@@ -63,45 +95,65 @@ public class Accueil extends ActionBarActivity implements
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 
 
-
-
+		//Set up the ViewPager for Results
 	}
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
-		if(mViewPager!=null){
-			mViewPager.setVisibility(View.GONE);
+		if(viewPagerVitrine!=null){
+			viewPagerVitrine.setVisibility(View.GONE);
 		}
 		if(container!=null){
 			container.setVisibility(View.VISIBLE);
 		}
 
 		// update the main content by replacing fragments
-		if(position==0){
+		
+
+		if(position== VITRINE){
 			if(container!=null){
 				container.setVisibility(View.GONE);
 			}
-			if(mViewPager!=null){
-				mViewPager.setVisibility(View.VISIBLE);	
+			if(viewPagerVitrine!=null){
+				viewPagerVitrine.setVisibility(View.VISIBLE);	
 			}
 		}
-		if(position==1){
+
+
+		if(position== CARTE){
+			setActionBarColorFromId(R.color.bleu_cartel);
 			startActivity(new Intent(Accueil.this,Carte.class));
 		}
-		if(position==2){
+		if(position == PLANNING){
+			setActionBarColorFromId(R.color.orange_cartel);
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager
 			.beginTransaction()
 			.replace(R.id.container,
 					AgendaFragment.newInstance()).commit();
 		}
-		if(position==3){
-			Intent versNotifications = new Intent(this,NotificationDisplay.class);
-			Bundle extras = new Bundle();
-			extras.putString("title", "vous arrivez de l'accueil");
-			extras.putString("msg", "Si vous n'êtes pas enregistré, faites-le");
-			versNotifications.putExtras(extras);
-			startActivity(versNotifications);	
+
+		if(position == MATCHS){
+			setActionBarColorFromId(R.color.vert_cartel);
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			fragmentManager.beginTransaction()
+			.replace(R.id.container, FragmentMatchesResultats.newInstance()).commit();
+		}
+
+		if(position == PAR_SPORT){
+			setActionBarColorFromId(R.color.vert_cartel);
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			fragmentManager.beginTransaction()
+			.replace(R.id.container, FragmentsSports.newInstance()).commit();
+		}
+		if(position == CLASSEMENT){
+			setActionBarColorFromId(R.color.vert_cartel);
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			fragmentManager.beginTransaction()
+			.replace(R.id.container, FragmentClassements.newInstance()).commit();
+		}
+		if(position == MEDIASHARE){
+			startActivity(new Intent(Accueil.this,PicturesUploader.class));
 		}
 	}
 
@@ -145,9 +197,7 @@ public class Accueil extends ActionBarActivity implements
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -211,9 +261,43 @@ public class Accueil extends ActionBarActivity implements
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			return getResources().getStringArray(R.array.titles)[position];
+			return getResources().getStringArray(R.array.titles_vitrine)[position];
 		}
 	}
+
+	/**
+	 * 
+	 * @return true if the device is registered to the backend, false otherwise.
+	 */
+	public boolean isRegistered(){
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		return prefs.getBoolean("registered", false);
+	}
+
+
+	@Override
+	public void onBackStackChanged() {
+		shouldDisplayHomeUp();
+	}
+
+	public void shouldDisplayHomeUp(){
+		//Enable Up button only  if there are entries in the back stack
+		boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
+		getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
+	}
+
+	@Override
+	public boolean onSupportNavigateUp() {
+		//This method is called when the up button is pressed. Just the pop back stack.
+		getSupportFragmentManager().popBackStack();
+		return true;
+	}
+
+	public void setActionBarColorFromId(int id){
+		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(id)));
+	}
+
+
 
 
 }

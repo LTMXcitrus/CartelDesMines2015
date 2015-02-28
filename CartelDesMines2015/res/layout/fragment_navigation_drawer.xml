@@ -2,10 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gris"
+    android:background="@drawable/navigation_drawer_background"
     android:choiceMode="singleChoice"
-    android:divider="@color/gris"
-    android:dividerHeight="1px"
-    android:alpha="0.5"
+    android:divider="@null"
+    android:dividerHeight="0dp"
     tools:context="cartel.mines.nantes2015.NavigationDrawerFragment" />
-

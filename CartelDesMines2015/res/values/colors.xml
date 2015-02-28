@@ -9,5 +9,9 @@
     <color name="jaune_cartel">#F0D70B</color>
     <color name="rouge_cartel">#D10B0C</color>
     <color name="vert_cartel">#15A02D</color>
+    <color name="orange_cartel">#FD9D3E</color>
+    <color name="jaune_premier">#FFFF00</color>
+    <color name="gris_deuxieme">#D1D1D1</color>
+    <color name="bronze_troisieme">#D48A00</color>
     
 </resources>

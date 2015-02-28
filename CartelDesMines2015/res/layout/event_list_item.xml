@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="3dp" >
+
+        <TextView
+            android:id="@+id/horaire_hour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="09"
+            android:textColor="@color/orange_cartel"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/horaire_minute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="00"
+            android:textColor="@color/orange_cartel"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_margin="3dp"
+        android:orientation="vertical"
+        android:paddingLeft="5dp" >
+
+        <TextView
+            android:id="@+id/event_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Tonus Jungle"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/event_place"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="La Trocardière, Nantes"
+            android:textColor="@color/orange_cartel"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</LinearLayout>
