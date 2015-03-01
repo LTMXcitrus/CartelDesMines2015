@@ -2,6 +2,7 @@ package cartel.mines.nantes2015;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +33,7 @@ public class EventsOfDayList extends ListActivity{
 		ListView list = getListView();
 		
 		eventsOfDay = (ArrayList<CalendarEvent>) getIntent().getSerializableExtra("eventList");
+		Collections.sort(eventsOfDay);
 		list.setAdapter(new EventsListAdapter(this, R.layout.event_list_item, eventsOfDay));
 		
 		list.setOnItemClickListener(new OnItemClickListener() {

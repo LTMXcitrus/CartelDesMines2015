@@ -9,10 +9,12 @@ import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.android.gms.internal.jo;
-
 public class Match implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String sport;
 	private int hourOfDay;
 	private int minuteOfHour;

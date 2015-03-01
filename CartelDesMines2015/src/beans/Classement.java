@@ -119,14 +119,14 @@ public class Classement implements Serializable, Comparable<Classement>{
 
 	@Override
 	public int compareTo(Classement another) {
-		if(this.getPoints() < another.getPoints()){
-			return 1;
+		if(this.getRank() < another.getRank()){
+			return -1;
 		}
-		else if(this.getPoints() == another.getPoints()){
+		else if(this.getRank() == another.getRank()){
 			return 0;
 		}
 		else{
-			return -1;
+			return 1;
 		}
 	}
 

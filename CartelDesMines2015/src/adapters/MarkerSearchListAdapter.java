@@ -1,11 +1,6 @@
 package adapters;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import cartel.mines.nantes2015.R;
-
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import cartel.mines.nantes2015.R;
+
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerSearchListAdapter extends ArrayAdapter<MarkerOptions> {
 	

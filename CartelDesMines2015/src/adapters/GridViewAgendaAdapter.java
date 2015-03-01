@@ -1,9 +1,6 @@
 package adapters;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import beans.CalendarEvent;
 import android.app.Activity;
 import android.content.Context;

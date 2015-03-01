@@ -1,13 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
+    
+    <TextView
+        android:id="@+id/dateEvent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_alignParentLeft="true"
+        android:textSize="20sp"
+        android:text="Date"/>
+    
+    <TextView 
+        android:id="@+id/placeEvent"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/orange_cartel"
+        android:layout_below="@+id/dateEvent"
+        android:gravity="center"
+        android:text="Lieu"/>
 
     <TextView
         android:id="@+id/details"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"
+        android:layout_below="@+id/placeEvent"
+        android:layout_alignParentLeft="true"
+        android:textSize="18sp"
+        android:text="Description" />
 
-</LinearLayout>
+</RelativeLayout>

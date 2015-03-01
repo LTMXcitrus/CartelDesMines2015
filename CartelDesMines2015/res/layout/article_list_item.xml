@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <ImageView
+        android:layout_alignParentLeft="true"
+        android:id="@+id/imageThumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:src="@drawable/ic_launcher"/>
+    
+    <TextView 
+        android:id="@+id/articleTitle"
+        android:layout_toRightOf="@+id/imageThumbnail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:textSize="20sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Bienvenue Au Cartel des Mines 2015 "/>
+    
+     <TextView 
+        android:id="@+id/dateArticle"
+        android:layout_toRightOf="@+id/imageThumbnail"
+        android:layout_below="@+id/articleTitle"
+        android:layout_width="fill_parent"
+        android:layout_margin="3dp"
+        android:layout_height="wrap_content"
+        android:text="le 11/04 à 12h45"/>
+
+</RelativeLayout>

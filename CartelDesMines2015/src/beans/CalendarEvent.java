@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CalendarEvent implements Serializable{
+public class CalendarEvent implements Serializable, Comparable<CalendarEvent>{
 	
 	/**
 	 * 
@@ -151,5 +151,28 @@ public class CalendarEvent implements Serializable{
 		this.dayOfMonth = o.getInt("dayofmonth");
 		this.hourOfDay = o.getInt("hourofday");
 		this.minuteOfHour = o.getInt("minuteofhour");
+	}
+
+	@Override
+	public int compareTo(CalendarEvent another) {
+		int result = 0;
+		if(this.getHourOfDay() < another.getHourOfDay()){
+			result = -1;
+		}
+		else if(this.getHourOfDay() > another.getHourOfDay()){
+			result = 1;
+		}
+		else{
+			if(this.getMinuteOfHour() < another.getMinuteOfHour()){
+				result = -1;
+			}
+			else if(this.getMinuteOfHour() > another.getMinuteOfHour()){
+				result = 1;
+			}
+			else{
+				result = 0;
+			}
+		}
+		return result;
 	}
 }

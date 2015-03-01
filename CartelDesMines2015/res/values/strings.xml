@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">CartelDesMines2015</string>
+    <string name="app_name">Cartel 2015</string>
     <string name="cartel2015">Cartel 2015</string>
     <string name="bienvenue">Bienvenue à \nMines Nantes</string>
     <string name="aproposcartel">A propos du </string>

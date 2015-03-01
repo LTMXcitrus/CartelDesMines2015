@@ -1,7 +1,5 @@
 package adapters;
 
-import com.google.android.gms.drive.internal.t;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;

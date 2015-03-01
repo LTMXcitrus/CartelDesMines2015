@@ -2,29 +2,33 @@ package cartel.mines.nantes2015;
 
 import org.json.JSONException;
 
-import beans.CalendarEvent;
-import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.TextView;
+import beans.CalendarEvent;
 
-public class EventDetailActivity extends Activity{
+public class EventDetailActivity extends ActionBarActivity{
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.event_detail_activity);
 		
-		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.orange_cartel)));
-		
 		CalendarEvent event = (CalendarEvent) getIntent().getSerializableExtra("event");
 		
-		TextView details = (TextView) findViewById(R.id.details);
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.orange_cartel)));
+		actionBar.setTitle(event.getEvent());
 		
-		try {
-			details.setText(event.toJson());
-		} catch (JSONException e) {
-			Log.e("Cartel2015", e.getMessage());
-		}
+		TextView date = (TextView) findViewById(R.id.dateEvent);
+		TextView details = (TextView) findViewById(R.id.details);
+		TextView place = (TextView) findViewById(R.id.placeEvent);
+		
+		date.setText("Le " + event.getDayOfMonth() +"/04, à " + event.getHourAsString() + "h" + event.getMinuteAsString());
+		place.setText(event.getPlace());
+		
+		details.setText(event.getDescription());
 	}
 }

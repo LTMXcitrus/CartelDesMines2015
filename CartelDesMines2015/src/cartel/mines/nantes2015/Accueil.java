@@ -10,12 +10,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTabHost;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -151,6 +148,12 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.beginTransaction()
 			.replace(R.id.container, FragmentClassements.newInstance()).commit();
+		}
+		if(position == ACTUALITES){
+			setActionBarColorFromId(R.color.bleu_cartel);
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			fragmentManager.beginTransaction()
+			.replace(R.id.container, FragmentArticles.newInstance()).commit();
 		}
 		if(position == MEDIASHARE){
 			startActivity(new Intent(Accueil.this,PicturesUploader.class));

@@ -113,8 +113,8 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 		cursor.close();
 		
 		Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
-		Bitmap scaledBitmap = Bitmap.createScaledBitmap(yourSelectedImage, 300, 150, false);
-		image.setImageBitmap(scaledBitmap);
+		//Bitmap scaledBitmap = Bitmap.createScaledBitmap(yourSelectedImage, 300, 150, false);
+		image.setImageBitmap(yourSelectedImage);
 		imageUri= selectedImage;
 		scaleImage();
 
