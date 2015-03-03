@@ -23,10 +23,25 @@
     </string-array>
     
     <string-array name="dates">
-        <item>Jour 1</item>
-        <item>Jour 2</item>
-        <item>Jour 3</item>
-        <item>Jour 4</item>
+        <item>SAMEDI 11</item>
+        <item>DIMANCHE 12</item>
+        <item>LUNDI 13</item>
+        <item>MARDI 14</item>
+    </string-array>
+    
+    <string-array name="action_bar_titles">
+        <item>NOTHING</item>
+        <item>Cartel 2015</item>
+        <item>Carte</item>
+        <item>Planning</item>
+        <item>NOTHING</item>
+        <item>Résultats Par Matchs</item>
+        <item>Résultats Par Sports</item>
+        <item>Classement</item>
+        <item>NOTHING</item>
+        <item>Actualités du Cartel</item>
+        <item>Fil Photo</item>
+        <item>Partager mes Photos</item>
     </string-array>
     
     

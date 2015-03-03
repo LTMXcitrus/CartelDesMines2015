@@ -24,18 +24,18 @@ import android.widget.FrameLayout;
 public class Accueil extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, OnBackStackChangedListener{
 
 
-	private static final int CARTEL2015=0;
-	private static final int VITRINE=1;
-	private static final int CARTE=2;
-	private static final int PLANNING=3;
-	private static final int RESULTATS=4;
-	private static final int MATCHS=5;
-	private static final int PAR_SPORT=6;
-	private static final int CLASSEMENT=7;
-	private static final int NEWS=8;
-	private static final int ACTUALITES=9;
-	private static final int PICTURES=10;
-	private static final int MEDIASHARE=11;
+	public static final int CARTEL2015=0;
+	public static final int VITRINE=1;
+	public static final int CARTE=2;
+	public static final int PLANNING=3;
+	public static final int RESULTATS=4;
+	public static final int MATCHS=5;
+	public static final int PAR_SPORT=6;
+	public static final int CLASSEMENT=7;
+	public static final int NEWS=8;
+	public static final int ACTUALITES=9;
+	public static final int PICTURES=10;
+	public static final int MEDIASHARE=11;
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -102,6 +102,9 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 		}
 		if(container!=null){
 			container.setVisibility(View.VISIBLE);
+		}
+		if(actionBar!=null){
+			setMyActionBarTitle(position);
 		}
 
 		// update the main content by replacing fragments
@@ -178,7 +181,6 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setTitle(mTitle);
 	}
 
 	@Override
@@ -196,10 +198,7 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
+		item.getItemId();
 		
 		return super.onOptionsItemSelected(item);
 	}
@@ -298,6 +297,10 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 
 	public void setActionBarColorFromId(int id){
 		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(id)));
+	}
+	
+	public void setMyActionBarTitle(int position){
+		actionBar.setTitle(getResources().getStringArray(R.array.action_bar_titles)[position]);
 	}
 
 
