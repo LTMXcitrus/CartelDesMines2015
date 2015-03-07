@@ -7,6 +7,8 @@ import tools.MatchesListener;
 import beans.Match;
 import adapters.MatchesListAdapter;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -37,10 +39,19 @@ public class FragmentMatchesResultats extends ListFragment implements MatchesLis
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		MatchesLoader loader = new MatchesLoader(this);
+		
+		final MatchesLoader loader = new MatchesLoader(this);
 		loader.start();
 		
 		dialog = ProgressDialog.show(getActivity(), "Veuillez patienter...", "Chargement...");
+		dialog.setCancelable(true);
+		dialog.setOnCancelListener(new OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				loader.interrupt();
+			}
+		});
 
 		list = getListView();
 

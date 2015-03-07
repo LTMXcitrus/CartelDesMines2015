@@ -9,6 +9,8 @@ import tools.ArticlesImagesLoaderListener;
 import tools.ArticlesLoaderListener;
 import adapters.ArticlesListAdapter;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -45,11 +47,19 @@ public class FragmentArticles extends ListFragment implements ArticlesImagesLoad
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		ArticlesLoader loader = new ArticlesLoader(this,this);
+		final ArticlesLoader loader = new ArticlesLoader(this,this);
 		loader.start();
 		imagesThumbnail = new ArrayList<Bitmap>();
 		
 		dialog = ProgressDialog.show(getActivity(), "Veuillez patienter...", "Chargement...");
+		dialog.setCancelable(true);
+		dialog.setOnCancelListener(new OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				loader.interrupt();
+			}
+		});
 
 		list = getListView();
 	}

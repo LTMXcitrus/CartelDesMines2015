@@ -24,18 +24,19 @@ import android.widget.FrameLayout;
 public class Accueil extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, OnBackStackChangedListener{
 
 
-	public static final int CARTEL2015=0;
-	public static final int VITRINE=1;
-	public static final int CARTE=2;
-	public static final int PLANNING=3;
-	public static final int RESULTATS=4;
-	public static final int MATCHS=5;
-	public static final int PAR_SPORT=6;
-	public static final int CLASSEMENT=7;
-	public static final int NEWS=8;
-	public static final int ACTUALITES=9;
-	public static final int PICTURES=10;
-	public static final int MEDIASHARE=11;
+	private static final int CARTEL2015=0;
+	private static final int VITRINE=1;
+	private static final int CARTE=2;
+	private static final int PLANNING=3;
+	private static final int RESULTATS=4;
+	private static final int MATCHS=5;
+	private static final int PAR_SPORT=6;
+	private static final int PAR_DELEGATION=7;
+	private static final int CLASSEMENT=8;
+	private static final int NEWS=9;
+	private static final int ACTUALITES=10;
+	private static final int PICTURES=11;
+	private static final int MEDIASHARE=12;
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -97,6 +98,7 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
+		System.out.println(position);
 		if(viewPagerVitrine!=null){
 			viewPagerVitrine.setVisibility(View.GONE);
 		}
@@ -145,6 +147,12 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.beginTransaction()
 			.replace(R.id.container, FragmentsSports.newInstance()).commit();
+		}
+		if(position == PAR_DELEGATION){
+			setActionBarColorFromId(R.color.vert_cartel);
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			fragmentManager.beginTransaction()
+			.replace(R.id.container, FragmentResultatsDelegation.newInstance()).commit();
 		}
 		if(position == CLASSEMENT){
 			setActionBarColorFromId(R.color.vert_cartel);

@@ -28,7 +28,7 @@ public class ArticleActivity extends Activity implements ArticleImageGrandeLoade
 		TextView contenu = (TextView) findViewById(R.id.articleContenu);
 		imageArticle = (ImageView) findViewById(R.id.imageArticle);
 		
-		entete.setText("Ecrit par " + article.getAuthor() + ", le" + article.getDayOfMonth() + "/04 à " + article.getHourOfDay() + "h" + article.getMinuteOfHourAsString());
+		entete.setText("Ecrit par " + article.getAuthor() + ", le " + article.getDayOfMonth() + "/04 à " + article.getHourOfDay() + "h" + article.getMinuteOfHourAsString());
 		entete.setTextColor(getResources().getColor(R.color.bleu_cartel));
 		
 		contenu.setText(article.getBody());

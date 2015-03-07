@@ -16,6 +16,8 @@ import tools.PlanningOnLoadListener;
 import adapters.CalendarDayListAdapter;
 import adapters.GridViewAgendaAdapter;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -53,10 +55,16 @@ public class AgendaFragment extends ListFragment implements PlanningOnLoadListen
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
 		dialog = ProgressDialog.show(getActivity(), "Veuillez Patienter...", "Chargement...");
+		dialog.setCancelable(true);		
 		
-		
-		PlanningLoader loader = new PlanningLoader(this);
+		final PlanningLoader loader = new PlanningLoader(this);
 		loader.start();
+		dialog.setOnCancelListener(new OnCancelListener() {	
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				loader.interrupt();
+			}
+		});
 				
 		View rootView=inflater.inflate(R.layout.agenda_fragment, container, false);
 

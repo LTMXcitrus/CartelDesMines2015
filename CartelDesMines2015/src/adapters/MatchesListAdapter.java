@@ -51,6 +51,10 @@ public class MatchesListAdapter extends ArrayAdapter<Match>{
 		Typeface type = Typeface.createFromAsset(context.getAssets(),"fonts/StardusterCondensedModified.ttf");
 		scores.setTypeface(type);
 		
+		convertView.setClickable(false);
+		convertView.setOnClickListener(null);
+		convertView.setOnLongClickListener(null);
+		
 
 		return convertView;
 	}

@@ -22,11 +22,12 @@ public class NavigationDrawerAdapter extends ArrayAdapter<String>{
 	private static final int RESULTATS=4;
 	private static final int MATCHS=5;
 	private static final int PAR_SPORT=6;
-	private static final int CLASSEMENT=7;
-	private static final int NEWS=8;
-	private static final int ACTUALITES=9;
-	private static final int PICTURES=10;
-	private static final int MEDIASHARE=11;
+	private static final int PAR_DELEGATION=7;
+	private static final int CLASSEMENT=8;
+	private static final int NEWS=9;
+	private static final int ACTUALITES=10;
+	private static final int PICTURES=11;
+	private static final int MEDIASHARE=12;
 
 	private Context context;
 	private int resource;
@@ -84,6 +85,7 @@ public class NavigationDrawerAdapter extends ArrayAdapter<String>{
 				break;
 			case MATCHS:
 			case PAR_SPORT:
+			case PAR_DELEGATION:
 			case CLASSEMENT:
 				textView.setTextColor(context.getResources().getColor(R.color.vert_cartel));
 				break;

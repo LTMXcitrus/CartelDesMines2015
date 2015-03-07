@@ -13,6 +13,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import adapters.SpinnerDelegationChoiceAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -20,10 +21,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -45,34 +54,70 @@ public class RegistrationActivity extends Activity{
 	AtomicInteger msgId = new AtomicInteger();
 	SharedPreferences prefs;
 	Context context;
+	String[] delegationsString;
 
 	String regid;
+	String delegation;
 	
 	TextView erreur;
+	Spinner delegations;
+	Button validate;
 
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.notification_display);
+		setContentView(R.layout.registration_display);
 		
-		erreur  = (TextView) findViewById(R.id.erreur);
+		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
+		
+		delegationsString = getResources().getStringArray(R.array.delegations);
+		
+		
+		erreur  = (TextView) findViewById(R.id.registration_explication);
+		
+		delegations = (Spinner) findViewById(R.id.delegation_choice_registration);
+		delegations.setAdapter(new SpinnerDelegationChoiceAdapter(this));
+		
+		validate = (Button) findViewById(R.id.onRegistrationDone);
+		validate.setEnabled(false);
+		
+		delegations.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				delegation = delegationsString[position];
+				validate.setEnabled(true);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				validate.setEnabled(false);
+			}
+		});
 
 		context = getApplicationContext();
 
 		// Check device for Play Services APK. If check succeeds, proceed with
 		//  GCM registration.
+		
 		if (checkPlayServices()) {
 			gcm = GoogleCloudMessaging.getInstance(this);
 			regid = getRegistrationId(context);
-
-			if (regid.isEmpty()) {
-				RegisterInBackground rIB = new RegisterInBackground();
-				rIB.execute();
-			}
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			prefs.edit().putBoolean("registered", true).commit();
-			startActivity(new Intent(this,Accueil.class));
+			validate.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if (regid.isEmpty()) {
+						RegisterInBackground rIB = new RegisterInBackground();
+						rIB.execute();
+					}
+					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RegistrationActivity.this);
+					prefs.edit().putBoolean("registered", true).commit();
+					startActivity(new Intent(RegistrationActivity.this,Accueil.class));
+				}
+			});
+			
 		} else {
 			Log.i(TAG, "No valid Google Play Services APK found.");
 			erreur.setText("No valid Google Play Services APK found.");
@@ -150,6 +195,7 @@ public class RegistrationActivity extends Activity{
 
 		List<NameValuePair> liste = new ArrayList<NameValuePair>(6);
 		liste.add(new BasicNameValuePair("regId", regid));
+		liste.add(new BasicNameValuePair("delegation", delegation));
 		post.setEntity(new UrlEncodedFormEntity(liste, "UTF-8"));
 
 		client.execute(post);

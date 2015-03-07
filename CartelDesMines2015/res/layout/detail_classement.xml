@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/detailMatchClassement"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:text="1 - NANTES"
+            android:textColor="@color/bleu_cartel"
+            android:textSize="35sp" />
+
+        <TextView
+            android:id="@+id/detailClassementPoints"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detailMatchClassement"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:text="39 PTS"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detailClassementPoints"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/detailMatchVictoireText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="VICTOIRES\n "
+                    android:textColor="@color/vert_cartel"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/detailMatchVictoireNombre"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/detailMatchClassement"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="8"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/detailMatchNulsText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/detailMatchClassement"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="MATCHS\nNULS"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/detailMatchNulsNombre"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/detailMatchClassement"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/detailMatchDefaitesText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/detailMatchClassement"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="DEFAITES\n "
+                    android:textColor="@color/rouge_cartel"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/detailMatchDefaitesNombre"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/detailMatchClassement"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="4"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</ScrollView>

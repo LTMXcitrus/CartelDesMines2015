@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -197,8 +198,16 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 				}
 				else{
 					progress = ProgressDialog.show(PicturesUploader.this, "Chargement...", "Veuillez patienter...", true);
-					MediaUploader m = new MediaUploader(convertMediaUriToPath(imageUri), nameInput.getText().toString(), PicturesUploader.this);
+					progress.setCancelable(true);
+					
+					final MediaUploader m = new MediaUploader(convertMediaUriToPath(imageUri), nameInput.getText().toString(), PicturesUploader.this);
 					m.start();
+					progress.setOnCancelListener(new OnCancelListener() {
+						@Override
+						public void onCancel(DialogInterface dialog) {
+							m.interrupt();
+						}
+					});
 
 				}
 			}

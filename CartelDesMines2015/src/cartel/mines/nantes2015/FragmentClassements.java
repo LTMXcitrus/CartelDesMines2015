@@ -9,11 +9,16 @@ import beans.Classement;
 import tools.ClassementListener;
 import adapters.ClassementAdapter;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -39,10 +44,18 @@ public class FragmentClassements extends ListFragment implements ClassementListe
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		ClassementLoader loader = new ClassementLoader(this);
+		final ClassementLoader loader = new ClassementLoader(this);
 		loader.start();
 		
 		dialog = ProgressDialog.show(getActivity(), "Veuillez patienter...", "Chargement...");
+		dialog.setCancelable(true);
+		dialog.setOnCancelListener(new OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				loader.interrupt();
+			}
+		});
 
 		list = getListView();
 		
@@ -58,6 +71,16 @@ public class FragmentClassements extends ListFragment implements ClassementListe
 			public void run() {
 				ArrayAdapter<Classement> adapter = new ClassementAdapter(getActivity(), R.layout.leaderboards_list_item_layout, classements);
 				list.setAdapter(adapter);
+				list.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						Intent intent = new Intent(getActivity(),ClassementDetailActivity.class);
+						intent.putExtra("classement", classements.get(position));
+						startActivity(intent);
+					}
+				});
 				
 			}
 		});

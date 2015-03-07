@@ -10,11 +10,12 @@
     <string-array name="drawer_sections">
         <item>CARTEL 2015</item>
         <item>Nantes</item>
-        <item>Carte</item>
-        <item>Planning</item>
+        <item>Sites du Cartel</item>
+        <item>Programme</item>
         <item>RESULTATS</item>
-        <item>En Continu</item>
-   		<item>Par Sport</item>
+        <item>En continu</item>
+   		<item>Par discipline</item>
+   		<item>Par délégation</item>
         <item>Classement</item>
         <item>NEWS</item>
         <item>Actualités</item>
@@ -33,15 +34,27 @@
         <item>NOTHING</item>
         <item>Cartel 2015</item>
         <item>Carte</item>
-        <item>Planning</item>
+        <item>Programme</item>
         <item>NOTHING</item>
-        <item>Résultats Par Matchs</item>
-        <item>Résultats Par Sports</item>
+        <item>Résultats par matchs</item>
+        <item>Résultats ar discipline</item>
+        <item>Résultats par délégation</item>
         <item>Classement</item>
         <item>NOTHING</item>
         <item>Actualités du Cartel</item>
-        <item>Fil Photo</item>
-        <item>Partager mes Photos</item>
+        <item>Fil photo</item>
+        <item>Partager mes photos</item>
+    </string-array>
+    
+    <string-array name="delegations">
+        <item>Nantes</item>
+        <item>Alès</item>
+        <item>Albi</item>
+        <item>Paris</item>
+        <item>Telecom Bretagne</item>
+        <item>Saint-Etienne</item>
+        <item>Douai</item>
+        <item>Nancy</item>
     </string-array>
     
     
