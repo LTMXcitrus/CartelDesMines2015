@@ -11,13 +11,16 @@ import tools.MyInfoWindowAdapterListener;
 import tools.SearchInMarkers;
 import adapters.MarkerSearchListAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnCloseListener;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,7 +65,10 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.carte_layout);
 		
-		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
+		ActionBar actionBar = getSupportActionBar();
+
+		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		MarkerLoader getMarkers = null;
 		try {
@@ -79,7 +85,7 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 		sportsPoiVisibility = (Button) findViewById(R.id.sportsvisibility);
 		sportsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.SPORT));
 		repasPoiVisibity = (Button) findViewById(R.id.repasvisibility);
-		repasPoiVisibity.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.REPAS));
+		repasPoiVisibity.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.SOIREE));
 		logementsPoiVisibility = (Button) findViewById(R.id.logementsvisibility);
 		logementsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.LOGEMENT));
 
@@ -97,7 +103,7 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 		this.markersQueryResources=markersQueryResources;
 		this.types=types;
 		sportsPoiVisibility.post(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				addMarkersToMap();
@@ -119,7 +125,7 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 				invalidateOptionsMenu();
 			}
 		});
-		
+
 	}
 	/**
 	 * Add the Markers from markers ArrayList to the map
@@ -224,6 +230,12 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 			}
 			return false;
 		}
+		if(id == android.R.id.home){
+			Intent intent = new Intent(this,Accueil.class);
+			intent.putExtra("carte", "carte");
+			startActivity(intent);
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -240,7 +252,7 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 
 		public final static String SPORT = "sport";
 		public final static String LOGEMENT = "logement";
-		public final static	String	REPAS = "repas";
+		public final static	String	SOIREE = "soiree";
 
 		private HashMap<String, Boolean> visibilities;
 
@@ -255,7 +267,7 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 			this.visibilities = new HashMap<String, Boolean>();
 			this.visibilities.put(SPORT, true);
 			this.visibilities.put(LOGEMENT, true);
-			this.visibilities.put(REPAS,true);
+			this.visibilities.put(SOIREE,true);
 		}
 
 		@Override
@@ -270,5 +282,17 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 			}
 		}
 
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		if ((keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK )) {
+			Intent intent = new Intent(this,Accueil.class);
+			intent.putExtra("carte", "carte");
+			startActivity(intent);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 }

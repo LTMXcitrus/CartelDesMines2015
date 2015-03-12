@@ -2,10 +2,11 @@ package cartel.mines.nantes2015;
 
 import java.util.ArrayList;
 
-import loaders.MatchesLoader;
-import tools.MatchesListener;
+import loaders.ResultatsLoader;
+import tools.ResultatsListener;
 import beans.Match;
-import adapters.MatchesListAdapter;
+import beans.Resultat;
+import adapters.ResultatsListAdapter;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -17,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class FragmentMatchesResultats extends ListFragment implements MatchesListener{
+public class FragmentMatchesResultats extends ListFragment implements ResultatsListener{
 
 	ListView list;
 	ProgressDialog dialog;
@@ -40,7 +41,7 @@ public class FragmentMatchesResultats extends ListFragment implements MatchesLis
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
 		
-		final MatchesLoader loader = new MatchesLoader(this);
+		final ResultatsLoader loader = new ResultatsLoader(this);
 		loader.start();
 		
 		dialog = ProgressDialog.show(getActivity(), "Veuillez patienter...", "Chargement...");
@@ -54,19 +55,16 @@ public class FragmentMatchesResultats extends ListFragment implements MatchesLis
 		});
 
 		list = getListView();
-
-
-
 	}
 
 	@Override
-	public void onLoadFinished(final ArrayList<Match> matches) {
+	public void onLoadFinished(final ArrayList<Resultat> resultats) {
 		dialog.dismiss();
 		list.post(new Runnable() {
 
 			@Override
 			public void run() {
-				list.setAdapter(new MatchesListAdapter(getActivity(), R.layout.matches_list_item, matches));
+				list.setAdapter(new ResultatsListAdapter(getActivity(), R.layout.matches_list_item, resultats));
 			}
 		});
 	}

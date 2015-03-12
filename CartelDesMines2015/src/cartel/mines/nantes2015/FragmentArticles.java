@@ -3,7 +3,7 @@ package cartel.mines.nantes2015;
 import java.util.ArrayList;
 
 import loaders.ArticlesLoader;
-import loaders.MatchesLoader;
+import loaders.ResultatsLoader;
 import beans.Article;
 import tools.ArticlesImagesLoaderListener;
 import tools.ArticlesLoaderListener;

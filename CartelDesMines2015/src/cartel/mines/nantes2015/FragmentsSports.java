@@ -3,6 +3,7 @@ package cartel.mines.nantes2015;
 import java.util.ArrayList;
 
 import beans.Match;
+import beans.Resultat;
 import tools.SportsLoaderListener;
 import loaders.ClassementLoader;
 import loaders.SportsLoader;
@@ -60,7 +61,7 @@ public class FragmentsSports extends ListFragment implements SportsLoaderListene
 	}
 
 	@Override
-	public void onLoadFinished(final ArrayList<Match> matches, final ArrayList<String> sports) {
+	public void onLoadFinished(final ArrayList<Resultat> matches, final ArrayList<String> sports) {
 		dialog.dismiss();
 		list.post(new Runnable() {
 
@@ -82,9 +83,9 @@ public class FragmentsSports extends ListFragment implements SportsLoaderListene
 	}
 
 
-	public static ArrayList<Match> getMatchesOfSport(ArrayList<Match> matches, String sport){
-		ArrayList<Match> matchesOfSports = new ArrayList<Match>();
-		for(Match match : matches){
+	public static ArrayList<Resultat> getMatchesOfSport(ArrayList<Resultat> matches, String sport){
+		ArrayList<Resultat> matchesOfSports = new ArrayList<Resultat>();
+		for(Resultat match : matches){
 			if(match.getSport().equals(sport)){
 				matchesOfSports.add(match);
 			}

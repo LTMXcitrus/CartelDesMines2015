@@ -9,7 +9,7 @@ import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Match implements Serializable{
+public class Match extends Resultat implements Serializable{
 
 	/**
 	 * 
@@ -25,6 +25,8 @@ public class Match implements Serializable{
 	private int scorePlayer1;
 	private int scorePlayer2;
 	private String matchType;
+	
+	public Match(){ }
 
 
 	public Match(String sport, int hourOfDay, int minuteOfHour, int dayOhMonth,
@@ -43,7 +45,8 @@ public class Match implements Serializable{
 		this.matchType = matchType;
 	}
 	
-	public static Match createMatchFromJson(JSONObject json) throws JSONException, ParseException{
+	@Override
+	public Match createFromJson(JSONObject json) throws JSONException, ParseException{
 		
 		String sport = json.getString("sport");
 		

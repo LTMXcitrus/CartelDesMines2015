@@ -17,8 +17,7 @@
             android:layout_alignParentTop="true"
             android:layout_margin="3dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitStart"
-            android:src="@drawable/ic_launcher" />
+            android:scaleType="fitStart" />
 
         <TextView
             android:id="@+id/entete"

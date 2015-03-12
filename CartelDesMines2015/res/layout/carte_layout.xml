@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:background="@drawable/mapbutton"
-                android:text="@string/repas" />
+                android:text="@string/soirees" />
 
             <Button
                 android:id="@+id/logementsvisibility"

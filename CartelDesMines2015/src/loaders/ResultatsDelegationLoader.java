@@ -15,7 +15,9 @@ import org.json.JSONObject;
 
 import tools.SportsLoaderListener;
 import android.util.Log;
+import beans.Course;
 import beans.Match;
+import beans.Resultat;
 
 public class ResultatsDelegationLoader extends Thread{
 
@@ -31,7 +33,7 @@ public class ResultatsDelegationLoader extends Thread{
 	public void run(){
 		try {
 			ArrayList<String> delegations = new ArrayList<String>();
-			ArrayList<Match> matches  = new ArrayList<Match>();
+			ArrayList<Resultat> resultats  = new ArrayList<Resultat>();
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/matchesliveclassement");
 			HttpResponse r = client.execute(get);
@@ -41,21 +43,30 @@ public class ResultatsDelegationLoader extends Thread{
 			JSONArray arrayMatches  = objectJson.getJSONArray("Matches");
 			for(int i=0;i<arrayMatches.length(); i++){
 				JSONObject matchJson = arrayMatches.getJSONObject(i);
-				Match match = Match.createMatchFromJson(matchJson);
-
-				matches.add(match);
-
-				if(!delegations.contains(match.getPlayer1())){
-					delegations.add(match.getPlayer1());
+				if(!isCourse(matchJson)){
+					Match match = new Match();
+					match = match.createFromJson(matchJson);
+					resultats.add(match);
+					
+					if(!delegations.contains(match.getPlayer1())){
+						delegations.add(match.getPlayer1());
+					}
+					if(!delegations.contains(match.getPlayer2())){
+						delegations.add(match.getPlayer2());
+					}
 				}
-				if(!delegations.contains(match.getPlayer2())){
-					delegations.add(match.getPlayer2());
+				else{
+					Course course = new Course();
+					course = course.createFromJson(matchJson);
+					resultats.add(course);
 				}
+
+				
 
 			}
 
 
-			handler.onLoadFinished(matches, delegations);
+			handler.onLoadFinished(resultats, delegations);
 
 		} catch (IOException | JSONException | ParseException e) {
 			// TODO Auto-generated catch block
@@ -63,6 +74,10 @@ public class ResultatsDelegationLoader extends Thread{
 		}
 
 
+	}
+	
+	private boolean isCourse(JSONObject json){
+		return json.has("participants");
 	}
 
 }

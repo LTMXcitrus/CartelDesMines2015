@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import loaders.ClassementLoader;
-import loaders.MatchesLoader;
+import loaders.ResultatsLoader;
 import beans.Classement;
 import tools.ClassementListener;
 import adapters.ClassementAdapter;

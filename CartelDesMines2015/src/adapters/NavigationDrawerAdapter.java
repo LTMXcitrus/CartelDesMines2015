@@ -28,6 +28,10 @@ public class NavigationDrawerAdapter extends ArrayAdapter<String>{
 	private static final int ACTUALITES=10;
 	private static final int PICTURES=11;
 	private static final int MEDIASHARE=12;
+	private static final int AUTRES=13;
+	private static final int SPONSORS=14;
+	private static final int REGLAGES=15;
+	private static final int A_PROPOS=16;
 
 	private Context context;
 	private int resource;
@@ -71,6 +75,11 @@ public class NavigationDrawerAdapter extends ArrayAdapter<String>{
 			setTextViewSet(section, textView);
 			section.setTextColor(context.getResources().getColor(R.color.bleu_cartel));
 			break;
+		case AUTRES:
+			setNonClickable(convertView);
+			setTextViewSet(section, textView);
+			section.setTextColor(context.getResources().getColor(R.color.rouge_cartel));
+			
 		default:
 			textView.setGravity(Gravity.CENTER_HORIZONTAL);
 			textView.setTextSize(18);
@@ -94,6 +103,10 @@ public class NavigationDrawerAdapter extends ArrayAdapter<String>{
 			case MEDIASHARE:
 				textView.setTextColor(context.getResources().getColor(R.color.bleu_cartel));
 				break;
+			case SPONSORS:
+			case REGLAGES:
+			case A_PROPOS:
+				textView.setTextColor(context.getResources().getColor(R.color.rouge_cartel));
 			}
 		}
 
@@ -124,6 +137,4 @@ public class NavigationDrawerAdapter extends ArrayAdapter<String>{
 	public void setSelectedRow(int selectedRow){
 		this.selectedRow=selectedRow;
 	}
-
-
 }

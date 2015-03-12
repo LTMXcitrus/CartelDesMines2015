@@ -1,7 +1,10 @@
 package cartel.mines.nantes2015;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -9,10 +12,13 @@ import org.apache.http.HttpResponse;
 
 import tools.MediaUploader;
 import tools.MediaUploaderListener;
+import adapters.MarkerSearchListAdapter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
@@ -28,9 +34,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,10 +51,18 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 	private final static int ACTIVITY_SELECT_IMAGE=0;
 	private final static int REQUEST_IMAGE_CAPTURE=1;
 
+	public static final int MEDIA_TYPE_IMAGE = 100;
+
+	private static final String FILE_URI = "file_uri";
+
+	private Uri fileUri;
+
+	private File imageFile;
+
 	TextView resultat;
 	ImageView image;
 	Button upload;
-	Uri imageUri;
+
 	Button chooseFileToUpload;
 	Button takePicturesToUpload;
 	TextView noFile;
@@ -58,7 +75,7 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pictures_ploader);
-		
+
 		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
 
 		loadWidgets();
@@ -84,11 +101,41 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 	}
 
 	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		System.out.println("onsavedInstanceState");
+		// Save the current Uri set for the file being chosen or picked
+
+		if(fileUri!=null){
+			savedInstanceState.putString(FILE_URI, fileUri.toString());
+		}
+
+
+		// Always call the superclass so it can save the view hierarchy state
+		super.onSaveInstanceState(savedInstanceState);
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		// Always call the superclass so it can restore the view hierarchy
+		super.onRestoreInstanceState(savedInstanceState);
+
+		System.out.println("onrestoreinstancestate");
+
+		// Restore state members from saved instance
+
+		fileUri  = Uri.parse(savedInstanceState.getString(FILE_URI));
+		System.out.println("after: fileUri: " + fileUri );
+	}
+
+	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent){
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
+		System.out.println(fileUri==null);
 		switch(requestCode) { 
 		case ACTIVITY_SELECT_IMAGE:
 			if(resultCode == RESULT_OK){
+				imageFile = new File(getRealPathFromURI(this, imageReturnedIntent.getData()));
+				
 				handleChosenTakenImage(imageReturnedIntent);				
 			}
 		case REQUEST_IMAGE_CAPTURE:
@@ -97,35 +144,71 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 			}
 		}
 	}
-	
+
 	public void handleChosenTakenImage(Intent intent){
 		noFile.setVisibility(View.GONE);
 		chooseFileToUpload.setVisibility(View.GONE);
 		upload.setEnabled(true);
-		
-		Uri selectedImage = intent.getData();
-		String[] filePathColumn = {MediaStore.Images.Media.DATA};
+		System.out.println("fileUri: " + fileUri);
+		if(imageFile != null){
+			System.out.println("imageFile path: " + imageFile.getAbsolutePath());
 
-		Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-		cursor.moveToFirst();
+			Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+			
+			fileUri = getImageContentUri(this, imageFile); 
+					
+			image.setImageBitmap(bitmap);
+		}
 
-		int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-		String filePath = cursor.getString(columnIndex);
-		cursor.close();
-		
-		Bitmap yourSelectedImage = BitmapFactory.decodeFile(filePath);
-		//Bitmap scaledBitmap = Bitmap.createScaledBitmap(yourSelectedImage, 300, 150, false);
-		image.setImageBitmap(yourSelectedImage);
-		imageUri= selectedImage;
-		scaleImage();
+		//scaleImage();
 
+	}
+	
+	public static Uri getImageContentUri(Context context, File imageFile) {
+	    String filePath = imageFile.getAbsolutePath();
+	    Cursor cursor = context.getContentResolver().query(
+	            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+	            new String[] { MediaStore.Images.Media._ID },
+	            MediaStore.Images.Media.DATA + "=? ",
+	            new String[] { filePath }, null);
+
+	    if (cursor != null && cursor.moveToFirst()) {
+	        int id = cursor.getInt(cursor
+	                .getColumnIndex(MediaStore.MediaColumns._ID));
+	        Uri baseUri = Uri.parse("content://media/external/images/media");
+	        return Uri.withAppendedPath(baseUri, "" + id);
+	    } else {
+	        if (imageFile.exists()) {
+	            ContentValues values = new ContentValues();
+	            values.put(MediaStore.Images.Media.DATA, filePath);
+	            return context.getContentResolver().insert(
+	                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+	        } else {
+	            return null;
+	        }
+	    }
+	}
+
+	public String getRealPathFromURI(Context context, Uri contentUri) {
+		Cursor cursor = null;
+		try { 
+			String[] proj = { MediaStore.Images.Media.DATA };
+			cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+			int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+			cursor.moveToFirst();
+			return cursor.getString(column_index);
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
 	}
 
 	private void handleSendImage(Intent intent) {
-		imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
-		if (imageUri != null) {
+		fileUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+		if (fileUri != null) {
 
-			image.setImageURI(imageUri);
+			image.setImageURI(fileUri);
 
 			upload.setEnabled(true);
 		}
@@ -133,6 +216,7 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 	} 
 
 	protected String convertMediaUriToPath(Uri uri) {
+		System.out.println(uri);
 		String [] proj={MediaStore.Images.Media.DATA};
 		Cursor cursor = getContentResolver().query(uri, proj,  null, null, null);
 		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -159,6 +243,21 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 			}
 		});
 
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if(id == android.R.id.home){
+			Intent intent = new Intent(this,Accueil.class);
+			intent.putExtra("carte", "carte");
+			startActivity(intent);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void loadWidgets(){
@@ -199,8 +298,10 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 				else{
 					progress = ProgressDialog.show(PicturesUploader.this, "Chargement...", "Veuillez patienter...", true);
 					progress.setCancelable(true);
+
+					String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 					
-					final MediaUploader m = new MediaUploader(convertMediaUriToPath(imageUri), nameInput.getText().toString(), PicturesUploader.this);
+					final MediaUploader m = new MediaUploader(convertMediaUriToPath(fileUri), nameInput.getText().toString()+"_"+timeStamp, PicturesUploader.this);
 					m.start();
 					progress.setOnCancelListener(new OnCancelListener() {
 						@Override
@@ -223,64 +324,139 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				imageFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+				fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+				System.out.println("before : fileUri: " + fileUri);
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
 				startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
 			}
 		});
+
+		image.setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				try {
+					rotateImage();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return false;
+			}
+		});
 	}
-	
+	private static Uri getOutputMediaFileUri(int type){
+		return Uri.fromFile(getOutputMediaFile(type));
+	}
+
+
+	private static File getOutputMediaFile(int type){
+		// To be safe, you should check that the SDCard is mounted
+		// using Environment.getExternalStorageState() before doing this.
+
+		File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+				Environment.DIRECTORY_PICTURES), "MyCameraApp");
+		// This location works best if you want the created images to be shared
+		// between applications and persist after your app has been uninstalled.
+
+		// Create the storage directory if it does not exist
+		if (! mediaStorageDir.exists()){
+			if (! mediaStorageDir.mkdirs()){
+				Log.d("MyCameraApp", "failed to create directory");
+				return null;
+			}
+		}
+
+		// Create a media file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		File mediaFile;
+		if (type == MEDIA_TYPE_IMAGE){
+			mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+					"IMG_"+ timeStamp + ".jpg");
+		}
+		else {
+			return null;
+		}
+
+		return mediaFile;
+	}
+
 	private void scaleImage()
 	{
-	    Drawable drawing = image.getDrawable();
-	    if (drawing == null) {
-	        return; // Checking for null & return, as suggested in comments
-	    }
-	    Bitmap bitmap = ((BitmapDrawable) drawing).getBitmap();
+		Drawable drawing = image.getDrawable();
+		if (drawing == null) {
+			return; // Checking for null & return, as suggested in comments
+		}
+		Bitmap bitmap = ((BitmapDrawable) drawing).getBitmap();
 
-	    // Get current dimensions AND the desired bounding box
-	    int width = bitmap.getWidth();
-	    int height = bitmap.getHeight();
-	    int bounding = dpToPx(250);
-	    Log.i("Test", "original width = " + Integer.toString(width));
-	    Log.i("Test", "original height = " + Integer.toString(height));
-	    Log.i("Test", "bounding = " + Integer.toString(bounding));
+		// Get current dimensions AND the desired bounding box
+		int width = bitmap.getWidth();
+		int height = bitmap.getHeight();
+		int bounding = dpToPx(250);
+		Log.i("Test", "original width = " + Integer.toString(width));
+		Log.i("Test", "original height = " + Integer.toString(height));
+		Log.i("Test", "bounding = " + Integer.toString(bounding));
 
-	    // Determine how much to scale: the dimension requiring less scaling is
-	    // closer to the its side. This way the image always stays inside your
-	    // bounding box AND either x/y axis touches it.  
-	    float xScale = ((float) bounding) / width;
-	    float yScale = ((float) bounding) / height;
-	    float scale = (xScale <= yScale) ? xScale : yScale;
-	    Log.i("Test", "xScale = " + Float.toString(xScale));
-	    Log.i("Test", "yScale = " + Float.toString(yScale));
-	    Log.i("Test", "scale = " + Float.toString(scale));
+		// Determine how much to scale: the dimension requiring less scaling is
+		// closer to the its side. This way the image always stays inside your
+		// bounding box AND either x/y axis touches it.  
+		float xScale = ((float) bounding) / width;
+		float yScale = ((float) bounding) / height;
+		float scale = (xScale <= yScale) ? xScale : yScale;
+		Log.i("Test", "xScale = " + Float.toString(xScale));
+		Log.i("Test", "yScale = " + Float.toString(yScale));
+		Log.i("Test", "scale = " + Float.toString(scale));
 
-	    // Create a matrix for the scaling and add the scaling data
-	    Matrix matrix = new Matrix();
-	    matrix.postScale(scale, scale);
+		// Create a matrix for the scaling and add the scaling data
+		Matrix matrix = new Matrix();
+		matrix.postScale(scale, scale);
 
-	    // Create a new bitmap and convert it to a format understood by the ImageView 
-	    Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-	    width = scaledBitmap.getWidth(); // re-use
-	    height = scaledBitmap.getHeight(); // re-use
-	    BitmapDrawable result = new BitmapDrawable(scaledBitmap);
-	    Log.i("Test", "scaled width = " + Integer.toString(width));
-	    Log.i("Test", "scaled height = " + Integer.toString(height));
+		// Create a new bitmap and convert it to a format understood by the ImageView 
+		Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+		width = scaledBitmap.getWidth(); // re-use
+		height = scaledBitmap.getHeight(); // re-use
+		BitmapDrawable result = new BitmapDrawable(scaledBitmap);
+		Log.i("Test", "scaled width = " + Integer.toString(width));
+		Log.i("Test", "scaled height = " + Integer.toString(height));
 
-	    // Apply the scaled bitmap
-	    image.setImageDrawable(result);
+		// Apply the scaled bitmap
+		image.setImageDrawable(result);
 
-	    // Now change ImageView's dimensions to match the scaled image
-	    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) image.getLayoutParams(); 
-	    params.width = width;
-	    params.height = height;
-	    image.setLayoutParams(params);
+		// Now change ImageView's dimensions to match the scaled image
+		LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) image.getLayoutParams(); 
+		params.width = width;
+		params.height = height;
+		image.setLayoutParams(params);
 
-	    Log.i("Test", "done");
+		Log.i("Test", "done");
+	}
+
+	private void rotateImage() throws IOException{
+		Matrix matrix = new Matrix();
+		matrix.postRotate(90);
+		Drawable drawing = image.getDrawable();
+		Bitmap bitmap = ((BitmapDrawable) drawing).getBitmap();
+		Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),bitmap.getHeight(), matrix, true);
+		image.setImageBitmap(rotatedBitmap);
+
+		if(imageFile!=null){
+			FileOutputStream fOut = new FileOutputStream(imageFile);
+			rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 85, fOut);
+			fOut.flush();
+			fOut.close();
+		}
 	}
 
 	private int dpToPx(int dp)
 	{
-	    float density = getApplicationContext().getResources().getDisplayMetrics().density;
-	    return Math.round((float)dp * density);
+		float density = getApplicationContext().getResources().getDisplayMetrics().density;
+		return Math.round((float)dp * density);
+	}
+
+	@Override
+	public void onBackPressed(){
+		Intent intent = new Intent(this,Accueil.class);
+		intent.putExtra("carte", "carte");
+		startActivity(intent);
 	}
 }

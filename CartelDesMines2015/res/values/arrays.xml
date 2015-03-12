@@ -7,6 +7,13 @@
         <item>Animation</item>
     </string-array>
     
+    <string-array name="dates">
+        <item>SAMEDI 11</item>
+        <item>DIMANCHE 12</item>
+        <item>LUNDI 13</item>
+        <item>MARDI 14</item>
+    </string-array>
+    
     <string-array name="drawer_sections">
         <item>CARTEL 2015</item>
         <item>Nantes</item>
@@ -21,13 +28,10 @@
         <item>Actualités</item>
         <item>Photos</item>
         <item>Partager mes photos</item>
-    </string-array>
-    
-    <string-array name="dates">
-        <item>SAMEDI 11</item>
-        <item>DIMANCHE 12</item>
-        <item>LUNDI 13</item>
-        <item>MARDI 14</item>
+        <item>AUTRES</item>
+        <item>Sponsors</item>
+        <item>Reglages</item>
+        <item>A propos</item>
     </string-array>
     
     <string-array name="action_bar_titles">
@@ -37,13 +41,17 @@
         <item>Programme</item>
         <item>NOTHING</item>
         <item>Résultats par matchs</item>
-        <item>Résultats ar discipline</item>
+        <item>Résultats par discipline</item>
         <item>Résultats par délégation</item>
         <item>Classement</item>
         <item>NOTHING</item>
         <item>Actualités du Cartel</item>
         <item>Fil photo</item>
         <item>Partager mes photos</item>
+        <item>NOTHING</item>
+        <item>Sponsors</item>
+        <item>Reglages</item>
+        <item>A propos de l\'appli Cartel 2015</item>
     </string-array>
     
     <string-array name="delegations">
@@ -55,8 +63,5 @@
         <item>Saint-Etienne</item>
         <item>Douai</item>
         <item>Nancy</item>
-    </string-array>
-    
-    
-    
+    </string-array>    
 </resources>

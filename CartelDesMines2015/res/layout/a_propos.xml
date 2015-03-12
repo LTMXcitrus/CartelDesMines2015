@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="5dp"
+    android:background="@color/blanc">
+
+    <LinearLayout
+        
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blanc"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="Appli réalisée par"
+            android:textColor="@color/bleu" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/pierre" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Pierre" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical" >
+
+                <ImageView
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:src="@drawable/matthieu" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Matthieu" />
+            </LinearLayout>
+        </LinearLayout>
+
+        
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Testeurs"
+            android:textColor="@color/bleu" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Benjamin Rancinangue\nElise Michel/nAngelin Versini\nYann Ravel-Sibillot" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Gwénolé Le Bars\nAlexandre Lopes\nStanislas Jalby\n" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/appversion"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:text="version" />
+
+        <TextView
+            android:id="@+id/contacteznous"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="@string/contact"
+            android:textColor="@color/bleu" />
+    </LinearLayout>
+
+</ScrollView>

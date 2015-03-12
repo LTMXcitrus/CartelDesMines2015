@@ -24,5 +24,8 @@
     <string name="choose_file_to_upload">Mes photos</string>
     <string name="take_picture_to_upload">Appareil Photo</string>
     <string name="no_match_yet">Pas encore de résultat!</string>
+    <string name="contact">contactez-nous</string>
+    <string name="soirees">Soirées</string>
+    <string name="clickToRotate">Pour changer l\'orientation: clic prolongé sur l\'image</string>
 
 </resources>

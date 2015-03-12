@@ -3,10 +3,12 @@ package cartel.mines.nantes2015;
 import java.util.ArrayList;
 
 import tools.SportsLoaderListener;
-import loaders.MatchesLoader;
+import loaders.ResultatsLoader;
 import loaders.ResultatsDelegationLoader;
+import beans.Course;
 import beans.Match;
-import adapters.MatchesListAdapter;
+import beans.Resultat;
+import adapters.ResultatsListAdapter;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -22,7 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class FragmentResultatsDelegation extends ListFragment implements SportsLoaderListener{
-	
+
 	ListView list;
 	ProgressDialog dialog;
 
@@ -35,22 +37,22 @@ public class FragmentResultatsDelegation extends ListFragment implements SportsL
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,	Bundle savedInstanceState) {
-		
+
 		return inflater.inflate(R.layout.fragment_resultats, container, false);
-		
+
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
+
 		final ResultatsDelegationLoader loader = new ResultatsDelegationLoader(this);
 		loader.start();
-		
+
 		dialog = ProgressDialog.show(getActivity(), "Veuillez patienter...", "Chargement...");
 		dialog.setCancelable(true);
 		dialog.setOnCancelListener(new OnCancelListener() {
-			
+
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				loader.interrupt();
@@ -64,10 +66,10 @@ public class FragmentResultatsDelegation extends ListFragment implements SportsL
 	}
 
 	@Override
-	public void onLoadFinished(final ArrayList<Match> matches, final ArrayList<String> delegations) {
+	public void onLoadFinished(final ArrayList<Resultat> matches, final ArrayList<String> delegations) {
 		dialog.dismiss();
 		list.post(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				list.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,delegations));
@@ -75,7 +77,7 @@ public class FragmentResultatsDelegation extends ListFragment implements SportsL
 
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						ArrayList<Match> matchesOfDelegation = getMatchesOfDelegation(matches, delegations.get(position));
+						ArrayList<Resultat> matchesOfDelegation = getMatchesOfDelegation(matches, delegations.get(position));
 						Intent intent = new Intent(getActivity(),MatchesParSportsActivity.class);
 						intent.putExtra("matches", matchesOfDelegation);
 						startActivity(intent);
@@ -84,12 +86,22 @@ public class FragmentResultatsDelegation extends ListFragment implements SportsL
 			}
 		});	
 	}
-	
-	public static ArrayList<Match> getMatchesOfDelegation(ArrayList<Match> matches, String delegation){
-		ArrayList<Match> result = new ArrayList<Match>();
-		for(Match match : matches){
-			if(match.getPlayer1().equals(delegation) || match.getPlayer2().equals(delegation)){
-				result.add(match);
+
+	public static ArrayList<Resultat> getMatchesOfDelegation(ArrayList<Resultat> resultats, String delegation){
+		ArrayList<Resultat> result = new ArrayList<Resultat>();
+		for(Resultat resultat : resultats){
+			if(resultat instanceof Match){
+				Match match = (Match) resultat;
+				if(match.getPlayer1().equals(delegation) || match.getPlayer2().equals(delegation)){
+					result.add(match);
+				}
+			}
+			else{
+				Course course = (Course) resultat;
+				if(course.getVainqueur().getEcole().equals(delegation) || course.getDeuxieme().getEcole().equals(delegation)
+						|| course.getTroisieme().getEcole().equals(delegation)){
+					result.add(course);
+				}
 			}
 		}
 		return result;

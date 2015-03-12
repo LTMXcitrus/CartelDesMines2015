@@ -14,7 +14,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tools.SportsLoaderListener;
+import beans.Course;
 import beans.Match;
+import beans.Resultat;
 
 public class SportsLoader extends Thread{
 	
@@ -28,7 +30,7 @@ public class SportsLoader extends Thread{
 	public void run(){
 		try {
 			ArrayList<String> sports = new ArrayList<String>();
-			ArrayList<Match> matches  = new ArrayList<Match>();
+			ArrayList<Resultat> resultats  = new ArrayList<Resultat>();
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/matchesliveclassement");
 			HttpResponse r = client.execute(get);
@@ -38,8 +40,16 @@ public class SportsLoader extends Thread{
 			JSONArray arrayMatches  = objectJson.getJSONArray("Matches");
 			for(int i=0;i<arrayMatches.length(); i++){
 				JSONObject matchJson = arrayMatches.getJSONObject(i);
-				Match match = Match.createMatchFromJson(matchJson);
-				matches.add(match);
+				if(!isCourse(matchJson)){
+					Match match = new Match();
+					match = match.createFromJson(matchJson);
+					resultats.add(match);
+				}
+				else{
+					Course course = new Course();
+					course = course.createFromJson(matchJson);
+					resultats.add(course);
+				}
 			}
 			JSONArray arraySports = objectJson.getJSONArray("Sports");
 			for(int i=0; i<arraySports.length(); i++){
@@ -48,12 +58,16 @@ public class SportsLoader extends Thread{
 				sports.add(sport);
 			}
 			
-			handler.onLoadFinished(matches, sports);
+			handler.onLoadFinished(resultats, sports);
 			
 		} catch (IOException | JSONException | ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private boolean isCourse(JSONObject json){
+		return json.has("participants");
 	}
 
 }

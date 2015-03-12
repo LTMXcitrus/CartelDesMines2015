@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <TextView
+        android:id="@+id/participant_classement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="5dp"
+        android:textSize="35sp"/>
+
+    <TextView
+        android:id="@+id/participant_ecole"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/participant_classement"
+        android:layout_alignParentTop="true"
+        android:text="Nantes"
+        android:layout_margin="3dp"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/participant_prenom_nom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/participant_classement"
+        android:layout_below="@+id/participant_ecole"
+        android:text="Camille Muffat"
+        android:layout_margin="3dp"
+        android:textSize="20sp" />
+    
+    <TextView
+        android:id="@+id/participant_temps"
+        android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:text="1'52'' 12"
+        android:layout_alignParentRight="true"
+        android:textSize="18sp"/>
+
+</RelativeLayout>
