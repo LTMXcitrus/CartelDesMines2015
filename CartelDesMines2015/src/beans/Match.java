@@ -46,11 +46,11 @@ public class Match extends Resultat implements Serializable{
 	}
 	
 	@Override
-	public Match createFromJson(JSONObject json) throws JSONException, ParseException{
+	public Match createFromJson(JSONObject json, String date) throws JSONException, ParseException{
 		
 		String sport = json.getString("sport");
 		
-		String date = json.getString("date");
+		
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		Date utilDate = df.parse(date);
 		DateTime jodaDate = new DateTime(utilDate);
@@ -61,12 +61,17 @@ public class Match extends Resultat implements Serializable{
 		String live = json.getString("live");
 		String player1 = json.getString("player1");
 		String player2 = json.getString("player2");
-		int scorePlayer1 = json.optInt("scoreplayer1");
-		int scorePlayer2 = json.optInt("scoreplayer2");
-		String matchType  = json.getString("matchtype");
+		int scorePlayer1 = json.optInt("scorePlayer1");
+		int scorePlayer2 = json.optInt("scorePlayer2");
+		String matchType  = json.getString("matchType");
 		
 		return new Match(sport, hourOfDay, minuteOfHour, dayOfMonth, live, player1, player2, scorePlayer1, scorePlayer2, matchType);
 		
+	}
+	
+	public Match createFromJson(JSONObject json, String date, String sport) throws JSONException, ParseException{
+		json.put("sport", sport);
+		return createFromJson(json, date);
 	}
 
 

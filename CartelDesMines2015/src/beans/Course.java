@@ -113,10 +113,9 @@ public class Course extends Resultat implements Serializable{
 	}
 	
 	@Override
-	public Course createFromJson(JSONObject json) throws JSONException, ParseException{
+	public Course createFromJson(JSONObject json, String date) throws JSONException, ParseException{
 		String sport = json.getString("sport");
-		String date = json.getString("date");
-		
+			
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		Date utilDate = df.parse(date);
 		DateTime jodaDate = new DateTime(utilDate);

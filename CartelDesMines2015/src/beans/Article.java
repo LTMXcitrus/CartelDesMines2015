@@ -9,7 +9,7 @@ import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Article implements Serializable{
+public class Article implements Serializable, Comparable<Article>{
 	
 	private String title;
 	private int dayOfMonth;
@@ -157,5 +157,35 @@ public class Article implements Serializable{
 		String body = json.getString("body");
 		
 		return new Article(title, dayOfMonth, hourOfDay, minuteOfHour, author, imageURL, thumbnailURL, posted, body);
+	}
+
+
+	@Override
+	public int compareTo(Article another) {
+		if(this.getDayOfMonth() < another.getDayOfMonth()){
+			return -1;
+		}
+		else if(this.getDayOfMonth() > another.getDayOfMonth()){
+			return 1;
+		}
+		else{
+			if(this.getHourOfDay() > another.getHourOfDay()){
+				return -1;
+			}
+			else if(this.getHourOfDay() > another.getHourOfDay()){
+				return 1;
+			}
+			else{
+				if(this.getMinuteOfHour() > another.getMinuteOfHour()){
+					return -1;
+				}
+				else if(this.getMinuteOfHour() > another.getMinuteOfHour()){
+					return 1;
+				}
+				else{
+					return 0;
+				}
+			}
+		}
 	}
 }

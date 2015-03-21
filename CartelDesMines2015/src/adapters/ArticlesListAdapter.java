@@ -32,7 +32,6 @@ public class ArticlesListAdapter extends ArrayAdapter<Article>{
 	public ArticlesListAdapter(Context context, int resource, List<Article> objects, List<Bitmap> images) {
 		this(context,resource,objects);
 		this.images=images;
-		
 	}
 	
 	

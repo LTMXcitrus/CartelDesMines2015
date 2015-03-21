@@ -52,8 +52,7 @@ public class ParticipantListeAdapter extends ArrayAdapter<Participant>{
 		try {
 			participant_temps.setText(participant.getMinutesOfTime()+"min "+participant.getSecondesOfTime()+"s "+participant.getMillisOfTime());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		if(position == 0){
 			participant_classement.setText("1");

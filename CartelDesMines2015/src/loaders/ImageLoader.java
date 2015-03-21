@@ -41,8 +41,7 @@ public class ImageLoader extends Thread{
 			stream = connection.getInputStream();
 			handler.onLoadFinished(BitmapFactory.decodeStream(stream),notif);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 }

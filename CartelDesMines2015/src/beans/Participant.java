@@ -117,8 +117,7 @@ public class Participant implements Serializable, Comparable<Participant>{
 				}
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		return result;
 	}

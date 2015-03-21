@@ -69,12 +69,10 @@ public class GcmIntentService extends IntentService implements ImageLoaderListen
 				String msg = extras.getString("msg");
 				String title = extras.getString("title");
 				String imageUrl = "";
-				String thumbnail = "";
-				if(extras.containsKey("image") && extras.containsKey("thumbnail")){
+				if(extras.containsKey("image")){
 					imageUrl = extras.getString("image");
-					thumbnail = extras.getString("thumbnail");
 				}
-				Notification notif = new Notification(title, msg, imageUrl, thumbnail);
+				Notification notif = new Notification(title, msg, imageUrl,null);
 
 				Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
 				// Post notification of received message.
@@ -102,40 +100,37 @@ public class GcmIntentService extends IntentService implements ImageLoaderListen
 
 		NotificationCompat.Builder mBuilder =
 				new NotificationCompat.Builder(this);
-		if(notif.getImageUrl().isEmpty()){
-			mBuilder.setSmallIcon(R.drawable.ic_launcher)
-			.setContentTitle(notif.getTitre())
-			.setStyle(new NotificationCompat.BigTextStyle()
-			.bigText(notif.getBody()))
-			.setContentText(notif.getBody())
-			.setVibrate(pattern)
-			.setSound(sound).setLights(Color.BLUE, 500, 500)
-			.setAutoCancel(true);
-			contentIntent = PendingIntent.getActivity(this, 0, intent,PendingIntent.FLAG_ONE_SHOT);
 
-			mBuilder.setContentIntent(contentIntent);
-			mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-		}
-		else{
-			ImageLoader loader = new ImageLoader(notif.getImageThumbnailUrl(), notif,this);
-			loader.start();
-		}
+		mBuilder.setSmallIcon(R.drawable.ic_launcher)
+		.setContentTitle(notif.getTitre())
+		.setStyle(new NotificationCompat.BigTextStyle()
+		.bigText(notif.getBody()))
+		.setContentText(notif.getBody())
+		.setVibrate(pattern)
+		.setSound(sound).setLights(Color.BLUE, 500, 500)
+		.setAutoCancel(true);
+		contentIntent = PendingIntent.getActivity(this, 0, intent,PendingIntent.FLAG_ONE_SHOT);
+
+		mBuilder.setContentIntent(contentIntent);
+		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 	}
+
+
 
 	@Override
 	public void onLoadFinished(Bitmap bitmap, Notification notif) {
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
 				new Intent(this, NotificationActivity.class), 0);
 		Intent intent =new Intent(this,NotificationActivity.class);
-		
+
 		intent.putExtra("notif", notif);
 		long[] pattern = {0,1000};
-		
-		
+
+
 		Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 		NotificationCompat.Builder mBuilder =
 				new NotificationCompat.Builder(this);
-		mBuilder.setLargeIcon(bitmap)
+		mBuilder
 		.setSmallIcon(R.drawable.ic_launcher)
 		.setContentTitle(notif.getTitre())
 		.setStyle(new NotificationCompat.BigTextStyle()

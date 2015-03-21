@@ -56,7 +56,9 @@ public class ResultatsListAdapter extends ArrayAdapter<Resultat>{
 			player1.setText(match.getPlayer1());
 			player2.setText(match.getPlayer2());
 			scores.setText(match.getScorePlayer1() + "-" + match.getScorePlayer2());
-			sport.setText(match.getSport());
+			
+			String sportOfMatch = match.getSport().replace("%20", " ");
+			sport.setText(sportOfMatch);
 			matchType.setText(match.getMatchType());
 
 			

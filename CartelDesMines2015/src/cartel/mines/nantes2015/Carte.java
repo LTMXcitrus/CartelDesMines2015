@@ -72,7 +72,7 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 
 		MarkerLoader getMarkers = null;
 		try {
-			getMarkers = new MarkerLoader(new URL("http://1-dot-inlaid-span-809.appspot.com/pointsofinterest"), this);
+			getMarkers = new MarkerLoader(new URL("http://cartel2015.com/fr/perso/webservices/static/poi.json"), this);
 		} catch (MalformedURLException e) {
 			System.out.println(e);
 		}
@@ -275,7 +275,16 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 			visibilities.put(visibilityType, !this.visibilities.get(visibilityType));
 			setMarkersVisibility(visibilityType, this.visibilities.get(visibilityType));
 			if(this.visibilities.get(visibilityType)){
-				((Button) v).setTextColor(Color.BLACK);
+				if(visibilityType.equals(SPORT)){
+					((Button) v).setTextColor(getResources().getColor(R.color.jaune_cartel));
+				}
+				if(visibilityType.equals(LOGEMENT)){
+					((Button) v).setTextColor(getResources().getColor(R.color.rouge_cartel));
+				}
+				if(visibilityType.equals(SOIREE)){
+					((Button) v).setTextColor(getResources().getColor(R.color.bleu_cartel));
+				}
+				
 			}
 			else{
 				((Button) v).setTextColor(Color.GRAY);

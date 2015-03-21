@@ -26,7 +26,7 @@ public class MyInfoWindowAdapterListener implements InfoWindowAdapter, OnInfoWin
 	//if both following methods return null, the default InfoWindow will be displayed
 	@Override
 	public View getInfoWindow(Marker arg0) {
-		// TODO Auto-generated method stub
+		
 				return null;
 	}
 	

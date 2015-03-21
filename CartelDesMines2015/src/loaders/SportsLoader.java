@@ -20,6 +20,8 @@ import beans.Resultat;
 
 public class SportsLoader extends Thread{
 	
+	//TODO set to webservices
+	
 	SportsLoaderListener handler;
 	
 	public SportsLoader(SportsLoaderListener handler){
@@ -30,39 +32,24 @@ public class SportsLoader extends Thread{
 	public void run(){
 		try {
 			ArrayList<String> sports = new ArrayList<String>();
-			ArrayList<Resultat> resultats  = new ArrayList<Resultat>();
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/matchesliveclassement");
+			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/getSports.php");
 			HttpResponse r = client.execute(get);
 			
 			String json = EntityUtils.toString(r.getEntity());
-			JSONObject objectJson = new JSONObject(json);
-			JSONArray arrayMatches  = objectJson.getJSONArray("Matches");
-			for(int i=0;i<arrayMatches.length(); i++){
-				JSONObject matchJson = arrayMatches.getJSONObject(i);
-				if(!isCourse(matchJson)){
-					Match match = new Match();
-					match = match.createFromJson(matchJson);
-					resultats.add(match);
-				}
-				else{
-					Course course = new Course();
-					course = course.createFromJson(matchJson);
-					resultats.add(course);
-				}
-			}
-			JSONArray arraySports = objectJson.getJSONArray("Sports");
+			
+			
+			JSONArray arraySports = new JSONArray(json);
 			for(int i=0; i<arraySports.length(); i++){
 				JSONObject sportObject =arraySports.getJSONObject(i);
 				String sport = sportObject.getString("sport");
 				sports.add(sport);
 			}
 			
-			handler.onLoadFinished(resultats, sports);
+			handler.onLoadFinished(sports);
 			
-		} catch (IOException | JSONException | ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IOException | JSONException e) {
+			System.out.println(e);
 		}
 	}
 	

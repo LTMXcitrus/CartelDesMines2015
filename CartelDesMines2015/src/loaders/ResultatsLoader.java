@@ -3,6 +3,7 @@ package loaders;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -21,6 +22,7 @@ import beans.Match;
 import beans.Resultat;
 
 public class ResultatsLoader extends Thread{
+	
 
 	private ResultatsListener handler;
 
@@ -32,22 +34,25 @@ public class ResultatsLoader extends Thread{
 		try {
 			ArrayList<Resultat> resultats = new ArrayList<Resultat>();
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/matchesliveclassement");
+			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/getMatchesByDate.php");
+			System.out.println(get.getURI());
 			HttpResponse r = client.execute(get);
 
 			String json = EntityUtils.toString(r.getEntity());
 			JSONObject objectJson = new JSONObject(json);
-			JSONArray arrayMatches  = objectJson.getJSONArray("Matches");
-			for(int i=0;i<arrayMatches.length(); i++){
-				JSONObject matchJson = arrayMatches.getJSONObject(i);
+			JSONObject entries  = objectJson.getJSONObject("entries");
+			Iterator<String> keys = entries.keys();
+			while(keys.hasNext()){
+				String key = keys.next();
+				JSONObject matchJson = entries.getJSONObject(key);
 				if(!isCourse(matchJson)){
 					Match match = new Match();
-					match = match.createFromJson(matchJson);
+					match = match.createFromJson(matchJson,key);
 					resultats.add(match);
 				}
 				else{
 					Course course = new Course();
-					course = course.createFromJson(matchJson);
+					course = course.createFromJson(matchJson, key);
 					resultats.add(course);
 				}
 			}

@@ -58,13 +58,13 @@
             android:orientation="horizontal" >
 
             <EditText
-                android:id="@+id/name_input"
+                android:id="@+id/comment_input"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:layout_weight="1"
-                android:hint="Nom de l&apos;image"
-                android:imeOptions="actionDone" />
+                android:hint="Commentaire"
+                android:inputType="textMultiLine" />
 
             <Button
                 android:id="@+id/upload"
@@ -73,6 +73,11 @@
                 android:layout_weight="2"
                 android:text="Uploader" />
         </LinearLayout>
+        <TextView 
+            android:id="@+id/clickToRotateIndication"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/clickToRotate"/>
 
         <ImageView
             android:id="@+id/image"
@@ -81,11 +86,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitStart"
             android:layout_margin="3dp" />
-        <TextView 
-            android:id="@+id/clickToRotateIndication"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/clickToRotate"/>
+        
     </LinearLayout>
 
 </ScrollView>

@@ -7,6 +7,6 @@ import beans.Resultat;
 
 public interface SportsLoaderListener {
 	
-	public void onLoadFinished(ArrayList<Resultat>  matches, ArrayList<String> sports);
+	public void onLoadFinished(ArrayList<String> sports);
 
 }

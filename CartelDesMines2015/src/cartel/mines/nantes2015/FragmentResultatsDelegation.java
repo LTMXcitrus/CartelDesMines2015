@@ -2,7 +2,9 @@ package cartel.mines.nantes2015;
 
 import java.util.ArrayList;
 
+import tools.MatchesFilteredListener;
 import tools.SportsLoaderListener;
+import loaders.GetMatchesOfDelegation;
 import loaders.ResultatsLoader;
 import loaders.ResultatsDelegationLoader;
 import beans.Course;
@@ -23,7 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class FragmentResultatsDelegation extends ListFragment implements SportsLoaderListener{
+public class FragmentResultatsDelegation extends ListFragment implements SportsLoaderListener, MatchesFilteredListener{
 
 	ListView list;
 	ProgressDialog dialog;
@@ -66,7 +68,7 @@ public class FragmentResultatsDelegation extends ListFragment implements SportsL
 	}
 
 	@Override
-	public void onLoadFinished(final ArrayList<Resultat> matches, final ArrayList<String> delegations) {
+	public void onLoadFinished(final ArrayList<String> delegations) {
 		dialog.dismiss();
 		list.post(new Runnable() {
 
@@ -77,33 +79,23 @@ public class FragmentResultatsDelegation extends ListFragment implements SportsL
 
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						ArrayList<Resultat> matchesOfDelegation = getMatchesOfDelegation(matches, delegations.get(position));
-						Intent intent = new Intent(getActivity(),MatchesParSportsActivity.class);
-						intent.putExtra("matches", matchesOfDelegation);
-						startActivity(intent);
+						getMatchesOfDelegation(delegations.get(position));
+
 					}
 				});
 			}
 		});	
 	}
 
-	public static ArrayList<Resultat> getMatchesOfDelegation(ArrayList<Resultat> resultats, String delegation){
-		ArrayList<Resultat> result = new ArrayList<Resultat>();
-		for(Resultat resultat : resultats){
-			if(resultat instanceof Match){
-				Match match = (Match) resultat;
-				if(match.getPlayer1().equals(delegation) || match.getPlayer2().equals(delegation)){
-					result.add(match);
-				}
-			}
-			else{
-				Course course = (Course) resultat;
-				if(course.getVainqueur().getEcole().equals(delegation) || course.getDeuxieme().getEcole().equals(delegation)
-						|| course.getTroisieme().getEcole().equals(delegation)){
-					result.add(course);
-				}
-			}
-		}
-		return result;
+	public void getMatchesOfDelegation(String delegation){
+		GetMatchesOfDelegation loader = new GetMatchesOfDelegation(delegation, this);
+		loader.start();
+	}
+
+	@Override
+	public void onMatchesFilteredAvailable(ArrayList<Resultat> resultats) {
+		Intent intent = new Intent(getActivity(),MatchesParSportsActivity.class);
+		intent.putExtra("matches", resultats);
+		startActivity(intent);
 	}
 }

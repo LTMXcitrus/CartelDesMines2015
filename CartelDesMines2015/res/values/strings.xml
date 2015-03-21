@@ -27,5 +27,20 @@
     <string name="contact">contactez-nous</string>
     <string name="soirees">Soirées</string>
     <string name="clickToRotate">Pour changer l\'orientation: clic prolongé sur l\'image</string>
+    <string name="spie">Spie batignolles opère sur cinq grands domaines d\'activités:\n
+        1. La construction : bâtiments privés (bureaux, cliniques, centres commerciaux, bâtiments industriels, etc.) et bâtiments publics
+         (écoles, lycées, hôpitaux, etc.)\n
+		2. Le génie civil et les fondations : travaux souterrains, fondations spéciales, construction industriellle, ... \n
+		3. L’énergie et l’aménagement : installation électrique, maintenance multi-technique, peinture, aménagement intérieur, façades...\n
+		4. Les travaux publics : terrassement, travaux routiers, travaux sur réseaux...\n
+		5. Les projets immobiliers (création ou rénovation de quartiers, centres commerciaux, construction ou réhabilitation de locaux à usage de bureaux,
+		 de commerces, ou d\'hôtels, etc.) et les concessions (parkings, piscines)</string>
+	<string name="credit_mutuel">Une finalité qui se traduit par une organisation articulée autour des sociétaires et des clients avec des structures
+	     de décision au plus près des réalités locales et pour les sociétaires, des possibilités de s\’exprimer sur la gestion de leur banque dont ils
+	      possèdent le capital puisqu\’ils en détiennent des parts sociales.\n\n
+		Le Crédit Mutuel de Loire-Atlantique et du Centre Ouest offre aujourd\'hui une gamme de produits et de services complète qui s\'adresse aux particuliers,
+		 aux agriculteurs, aux artisans, aux commerçants, aux professions libérales, aux entreprises, aux associations, aux collectivités locales...
+		  Pour s\'adapter aux besoins de l\'ensemble de sa clientèle, il a d\'ailleurs diversifié ses métiers et propose des produits et services aussi
+		  bien dans le domaine de la banque que dans celui de l\'assurance et de la téléphonie mobile.</string>	
 
 </resources>

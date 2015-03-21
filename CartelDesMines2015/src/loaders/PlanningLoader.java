@@ -21,14 +21,14 @@ import beans.CalendarEvent;
 import tools.PlanningOnLoadListener;
 
 public class PlanningLoader extends Thread{
+	
+	//TODO set to webservices
 
 
 	private static final int FIRST_DAY = 11;
 	private static final int SECOND_DAY = 12;
 	private static final int THIRD_DAY = 13;
 	private static final int FOURTH_DAY = 14;
-
-
 
 	private PlanningOnLoadListener handler;
 
@@ -45,11 +45,11 @@ public class PlanningLoader extends Thread{
 
 			HttpClient client = new DefaultHttpClient();
 			HttpGet get = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/calendar");
-			HttpResponse r;
-			r = client.execute(get);
+			HttpResponse r = client.execute(get);
 			String json = EntityUtils.toString(r.getEntity());
 
-			JSONArray events = new JSONArray(json);
+			JSONObject calendar = new JSONObject(json);
+			JSONArray events = calendar.getJSONArray("Calendar");
 			for(int i=0; i< events.length(); i++){
 				JSONObject eventObject = events.getJSONObject(i);
 				String event = eventObject.getString("event");

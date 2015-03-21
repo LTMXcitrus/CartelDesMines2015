@@ -1,11 +1,29 @@
 package cartel.mines.nantes2015;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpParams;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import beans.Match;
 import beans.Resultat;
+import tools.MatchesFilteredListener;
 import tools.SportsLoaderListener;
 import loaders.ClassementLoader;
+import loaders.GetMatchesFilteredBySports;
 import loaders.SportsLoader;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -21,7 +39,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class FragmentsSports extends ListFragment implements SportsLoaderListener{
+public class FragmentsSports extends ListFragment implements SportsLoaderListener, MatchesFilteredListener{
 
 	ProgressDialog dialog;
 	ListView list;
@@ -43,11 +61,13 @@ public class FragmentsSports extends ListFragment implements SportsLoaderListene
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
+		dialog = ProgressDialog.show(getActivity(), "Veuillez patienter...", "Chargement...");
+		
 		
 		final SportsLoader loader = new SportsLoader(this);
 		loader.start();
 
-		dialog = ProgressDialog.show(getActivity(), "Veuillez patienter...", "Chargement...");
+		
 		dialog.setCancelable(true);
 		dialog.setOnCancelListener(new OnCancelListener() {
 			@Override
@@ -61,7 +81,7 @@ public class FragmentsSports extends ListFragment implements SportsLoaderListene
 	}
 
 	@Override
-	public void onLoadFinished(final ArrayList<Resultat> matches, final ArrayList<String> sports) {
+	public void onLoadFinished( final ArrayList<String> sports) {
 		dialog.dismiss();
 		list.post(new Runnable() {
 
@@ -73,24 +93,24 @@ public class FragmentsSports extends ListFragment implements SportsLoaderListene
 
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						Intent intent =new Intent(getActivity(),MatchesParSportsActivity.class);
-						intent.putExtra("matches", getMatchesOfSport(matches, sports.get(position)));
-						startActivity(intent);
+						getMatchesOfSport(sports.get(position));
+						
 					}
 				});
 			}
 		});
 	}
 
+	public void getMatchesOfSport(final String sport){
+		GetMatchesFilteredBySports loader = new GetMatchesFilteredBySports(sport, this);
+		loader.start();
+	}
 
-	public static ArrayList<Resultat> getMatchesOfSport(ArrayList<Resultat> matches, String sport){
-		ArrayList<Resultat> matchesOfSports = new ArrayList<Resultat>();
-		for(Resultat match : matches){
-			if(match.getSport().equals(sport)){
-				matchesOfSports.add(match);
-			}
-		}
-		return matchesOfSports;
+	@Override
+	public void onMatchesFilteredAvailable(ArrayList<Resultat> resultats) {
+		Intent intent =new Intent(getActivity(),MatchesParSportsActivity.class);
+		intent.putExtra("matches", resultats);
+		startActivity(intent);
 	}
 
 }

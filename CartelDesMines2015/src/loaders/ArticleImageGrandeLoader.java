@@ -34,8 +34,7 @@ public class ArticleImageGrandeLoader extends Thread{
 			stream = connection.getInputStream();
 			handler.onLoadFinished(BitmapFactory.decodeStream(stream));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 
 	}

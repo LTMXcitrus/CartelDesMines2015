@@ -1,5 +1,7 @@
 package adapters;
 
+import java.util.ArrayList;
+
 import cartel.mines.nantes2015.R;
 import android.app.Activity;
 import android.content.Context;
@@ -12,22 +14,22 @@ import android.widget.TextView;
 public class SpinnerDelegationChoiceAdapter extends BaseAdapter{
 
 	Context context;
-	String[] objects;
+	ArrayList<String> delegations;
 
 
-	public SpinnerDelegationChoiceAdapter(Context context) {
+	public SpinnerDelegationChoiceAdapter(Context context, ArrayList<String> delegations) {
 		this.context=context;
-		this.objects = context.getResources().getStringArray(R.array.delegations);
+		this.delegations=delegations;
 	}
 
 	@Override
 	public int getCount() {
-		return objects.length;
+		return delegations.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return objects[position];
+		return delegations.get(position);
 	}
 
 	@Override
@@ -42,7 +44,7 @@ public class SpinnerDelegationChoiceAdapter extends BaseAdapter{
 			convertView = inflater.inflate(R.layout.spinner_item_custom, parent, false);
 		}
 		TextView spinnerOptionText = (TextView) convertView.findViewById(R.id.spinner_option_text);
-		spinnerOptionText.setText(objects[position]);
+		spinnerOptionText.setText(delegations.get(position));
 		return convertView;
 	}
 

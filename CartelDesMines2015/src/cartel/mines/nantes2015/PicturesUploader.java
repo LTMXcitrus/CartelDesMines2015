@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.util.EntityUtils;
 
 import tools.MediaUploader;
 import tools.MediaUploaderListener;
@@ -22,6 +24,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +35,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -74,7 +78,7 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.pictures_ploader);
+		setContentView(R.layout.pictures_uploader);
 
 		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
 
@@ -102,7 +106,6 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 
 	@Override
 	public void onSaveInstanceState(Bundle savedInstanceState) {
-		System.out.println("onsavedInstanceState");
 		// Save the current Uri set for the file being chosen or picked
 
 		if(fileUri!=null){
@@ -119,23 +122,19 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 		// Always call the superclass so it can restore the view hierarchy
 		super.onRestoreInstanceState(savedInstanceState);
 
-		System.out.println("onrestoreinstancestate");
-
 		// Restore state members from saved instance
 
 		fileUri  = Uri.parse(savedInstanceState.getString(FILE_URI));
-		System.out.println("after: fileUri: " + fileUri );
 	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent){
 		super.onActivityResult(requestCode, resultCode, imageReturnedIntent); 
-		System.out.println(fileUri==null);
 		switch(requestCode) { 
 		case ACTIVITY_SELECT_IMAGE:
 			if(resultCode == RESULT_OK){
 				imageFile = new File(getRealPathFromURI(this, imageReturnedIntent.getData()));
-				
+
 				handleChosenTakenImage(imageReturnedIntent);				
 			}
 		case REQUEST_IMAGE_CAPTURE:
@@ -149,44 +148,42 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 		noFile.setVisibility(View.GONE);
 		chooseFileToUpload.setVisibility(View.GONE);
 		upload.setEnabled(true);
-		System.out.println("fileUri: " + fileUri);
 		if(imageFile != null){
-			System.out.println("imageFile path: " + imageFile.getAbsolutePath());
 
 			Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-			
+
 			fileUri = getImageContentUri(this, imageFile); 
-					
+
 			image.setImageBitmap(bitmap);
 		}
 
 		//scaleImage();
 
 	}
-	
-	public static Uri getImageContentUri(Context context, File imageFile) {
-	    String filePath = imageFile.getAbsolutePath();
-	    Cursor cursor = context.getContentResolver().query(
-	            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-	            new String[] { MediaStore.Images.Media._ID },
-	            MediaStore.Images.Media.DATA + "=? ",
-	            new String[] { filePath }, null);
 
-	    if (cursor != null && cursor.moveToFirst()) {
-	        int id = cursor.getInt(cursor
-	                .getColumnIndex(MediaStore.MediaColumns._ID));
-	        Uri baseUri = Uri.parse("content://media/external/images/media");
-	        return Uri.withAppendedPath(baseUri, "" + id);
-	    } else {
-	        if (imageFile.exists()) {
-	            ContentValues values = new ContentValues();
-	            values.put(MediaStore.Images.Media.DATA, filePath);
-	            return context.getContentResolver().insert(
-	                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-	        } else {
-	            return null;
-	        }
-	    }
+	public static Uri getImageContentUri(Context context, File imageFile) {
+		String filePath = imageFile.getAbsolutePath();
+		Cursor cursor = context.getContentResolver().query(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				new String[] { MediaStore.Images.Media._ID },
+				MediaStore.Images.Media.DATA + "=? ",
+						new String[] { filePath }, null);
+
+		if (cursor != null && cursor.moveToFirst()) {
+			int id = cursor.getInt(cursor
+					.getColumnIndex(MediaStore.MediaColumns._ID));
+			Uri baseUri = Uri.parse("content://media/external/images/media");
+			return Uri.withAppendedPath(baseUri, "" + id);
+		} else {
+			if (imageFile.exists()) {
+				ContentValues values = new ContentValues();
+				values.put(MediaStore.Images.Media.DATA, filePath);
+				return context.getContentResolver().insert(
+						MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+			} else {
+				return null;
+			}
+		}
 	}
 
 	public String getRealPathFromURI(Context context, Uri contentUri) {
@@ -216,7 +213,6 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 	} 
 
 	protected String convertMediaUriToPath(Uri uri) {
-		System.out.println(uri);
 		String [] proj={MediaStore.Images.Media.DATA};
 		Cursor cursor = getContentResolver().query(uri, proj,  null, null, null);
 		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -227,22 +223,26 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 	}
 
 	@Override
-	public void onUploadFinished(final HttpResponse res) {
+	public void onUploadFinished(final int code, final String entity) {
 		progress.dismiss();
 		resultat.post(new Runnable() {
 			@Override
 			public void run() {
 				resultat.setVisibility(View.VISIBLE);
-				int code = res.getStatusLine().getStatusCode();
+				System.out.println(code);
+				System.out.println(entity);
+
+
 				if(code == 200){
-					resultat.setText("Fichier envoyé !");
+					Intent intent = new Intent(PicturesUploader.this,Accueil.class);
+					intent.putExtra("key","imagethread");
+					startActivity(intent);
 				}
 				else{
 					resultat.setText("Erreur: " + code);
 				}		
 			}
 		});
-
 	}
 
 	@Override
@@ -266,7 +266,7 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 		chooseFileToUpload = (Button) findViewById(R.id.choose_file_to_upload);
 		image = (ImageView) findViewById(R.id.image);
 		upload = (Button) findViewById(R.id.upload);
-		nameInput = (EditText) findViewById(R.id.name_input);
+		nameInput = (EditText) findViewById(R.id.comment_input);
 		takePicturesToUpload = (Button) findViewById(R.id.take_picture_to_upload);
 		noFileLayout = (LinearLayout) findViewById(R.id.no_file_layout);
 	}
@@ -285,10 +285,11 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 					dialo.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							String choosenName =  chooseName.getText().toString();
-							if(!choosenName.isEmpty()){
-								nameInput.setText(choosenName);
+							String chosenName =  chooseName.getText().toString();
+							if(!chosenName.isEmpty()){
+								nameInput.setText(chosenName);
 								dialog.dismiss();
+								upload.performClick();
 							}
 						}
 					});
@@ -299,9 +300,11 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 					progress = ProgressDialog.show(PicturesUploader.this, "Chargement...", "Veuillez patienter...", true);
 					progress.setCancelable(true);
 
-					String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-					
-					final MediaUploader m = new MediaUploader(convertMediaUriToPath(fileUri), nameInput.getText().toString()+"_"+timeStamp, PicturesUploader.this);
+					SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+					String auteur = pref.getString("username", "noname");
+
+					final MediaUploader m = new MediaUploader(convertMediaUriToPath(fileUri), nameInput.getText().toString(),
+							auteur, PicturesUploader.this);
 					m.start();
 					progress.setOnCancelListener(new OnCancelListener() {
 						@Override

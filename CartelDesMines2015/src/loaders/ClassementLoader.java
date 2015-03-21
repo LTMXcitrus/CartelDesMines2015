@@ -18,6 +18,8 @@ import beans.Classement;
 
 public class ClassementLoader extends Thread{
 	
+	//TODO set to webservices
+	
 	ClassementListener handler;
 	
 	public ClassementLoader(ClassementListener handler){
@@ -32,7 +34,7 @@ public class ClassementLoader extends Thread{
 			
 			//Preparing the HttpRequest
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/matchesliveclassement");
+			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/getArticlesList.php");
 			HttpResponse r = client.execute(get);
 			
 			//Reading the httpResponse

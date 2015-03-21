@@ -7,40 +7,60 @@
 
     <ImageView
         android:id="@+id/logocartelregistration"
-        android:src="@drawable/logo_cartel_et_emn_grand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:adjustViewBounds="true"
-        android:scaleType="fitStart" />
-    
-     <TextView
+        android:scaleType="fitStart"
+        android:src="@drawable/logo_cartel_et_emn_grand" />
+
+    <TextView
+        android:id="@+id/registration_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="3dp"
+        android:gravity="center"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/registration_explication"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="3dp"
         android:gravity="center"
-        android:textSize="18sp"
+        android:text="Sélectionnez votre délégation:"
         android:textColor="@color/bleu_cartel"
-        android:text="Sélectionnez votre délégation:" />
-    
+        android:textSize="18sp" />
+
     <Spinner
         android:id="@+id/delegation_choice_registration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start"
-        android:layout_centerInParent="true"
         android:layout_below="@+id/registration_explication"
+        android:layout_centerInParent="true"
+        android:gravity="start"
         android:spinnerMode="dropdown" />
-    <Button 
-        android:id="@+id/onRegistrationDone"
-        android:layout_below="@+id/delegation_choice_registration"
+    
+    <EditText
+        android:id="@+id/username_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Valider"/>
+        android:layout_margin="3dp"
+        android:layout_below="@+id/delegation_choice_registration"
+        android:gravity="center"
+        android:hint="Entrez un pseudo"
+        android:textColor="@color/bleu_cartel"
+        android:textSize="18sp" />
 
-   
+    <Button
+        android:id="@+id/onRegistrationDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/username_input"
+        android:layout_centerInParent="true"
+        android:text="Valider" />
 
 </RelativeLayout>

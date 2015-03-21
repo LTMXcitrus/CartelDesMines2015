@@ -23,6 +23,9 @@ public class NotificationActivity extends Activity implements ImageLoaderListene
 		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
 		
 		Notification notif = (Notification) getIntent().getSerializableExtra("notif");
+		
+		System.out.println(notif.getImageUrl().isEmpty());
+		System.out.println(notif.getImageUrl());
 		if(!notif.getImageUrl().isEmpty()){
 			ImageLoader loader = new ImageLoader(notif.getImageUrl(),null,this);
 			loader.start();

@@ -88,14 +88,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Benjamin Rancinangue\nElise Michel/nAngelin Versini\nYann Ravel-Sibillot" />
+                android:text="Benjamin Rancinangue\nElise Michel\nAngelin Versini\nYann Ravel-Sibillot" />
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Gwénolé Le Bars\nAlexandre Lopes\nStanislas Jalby\n" />
+                android:text="Gwenolé Le Bars\nAlexandre Lopes\nJean-Yves Lemonnier\nTsiory Peyron" />
         </LinearLayout>
 
         <TextView

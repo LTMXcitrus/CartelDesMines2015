@@ -156,23 +156,33 @@ public class CalendarEvent implements Serializable, Comparable<CalendarEvent>{
 	@Override
 	public int compareTo(CalendarEvent another) {
 		int result = 0;
-		if(this.getHourOfDay() < another.getHourOfDay()){
-			result = -1;
+		if(this.getDayOfMonth() < another.getDayOfMonth()){
+			return -1;
 		}
-		else if(this.getHourOfDay() > another.getHourOfDay()){
-			result = 1;
+		else if(this.getDayOfMonth() > another .dayOfMonth){
+			return 1;
 		}
 		else{
-			if(this.getMinuteOfHour() < another.getMinuteOfHour()){
+			if(this.getHourOfDay() < another.getHourOfDay()){
 				result = -1;
 			}
-			else if(this.getMinuteOfHour() > another.getMinuteOfHour()){
+			else if(this.getHourOfDay() > another.getHourOfDay()){
 				result = 1;
 			}
 			else{
-				result = 0;
+				if(this.getMinuteOfHour() < another.getMinuteOfHour()){
+					result = -1;
+				}
+				else if(this.getMinuteOfHour() > another.getMinuteOfHour()){
+					result = 1;
+				}
+				else{
+					result = 0;
+				}
 			}
+			
 		}
+		
 		return result;
 	}
 }

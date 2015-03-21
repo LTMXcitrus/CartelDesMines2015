@@ -2,8 +2,11 @@ package cartel.mines.nantes2015;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import loaders.DelegationsListLoader;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -13,6 +16,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
+import tools.DelegationsListLoaderCallback;
 import adapters.SpinnerDelegationChoiceAdapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -25,6 +29,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +37,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -39,7 +45,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-public class RegistrationActivity extends Activity{
+public class RegistrationActivity extends Activity implements DelegationsListLoaderCallback{
 
 	String SENDER_ID = "176135343380";
 
@@ -47,6 +53,8 @@ public class RegistrationActivity extends Activity{
 	public static final String PROPERTY_REG_ID = "registration_id";
 	private static final String PROPERTY_APP_VERSION = "appVersion";
 	private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+	
+	Handler handler = new Handler();
 
 	static final String TAG = "Cartel2015";
 	TextView mDisplay;
@@ -55,12 +63,14 @@ public class RegistrationActivity extends Activity{
 	SharedPreferences prefs;
 	Context context;
 	String[] delegationsString;
+	
+	EditText usernameInput;
 
 	String regid;
 	String delegation;
 	
 	TextView erreur;
-	Spinner delegations;
+	Spinner delegationsSpinner;
 	Button validate;
 
 	@SuppressLint("NewApi")
@@ -69,6 +79,9 @@ public class RegistrationActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.registration_display);
 		
+		DelegationsListLoader loader = new DelegationsListLoader(this);
+		loader.start();
+		
 		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
 		
 		delegationsString = getResources().getStringArray(R.array.delegations);
@@ -76,13 +89,14 @@ public class RegistrationActivity extends Activity{
 		
 		erreur  = (TextView) findViewById(R.id.registration_explication);
 		
-		delegations = (Spinner) findViewById(R.id.delegation_choice_registration);
-		delegations.setAdapter(new SpinnerDelegationChoiceAdapter(this));
+		delegationsSpinner = (Spinner) findViewById(R.id.delegation_choice_registration);
 		
 		validate = (Button) findViewById(R.id.onRegistrationDone);
 		validate.setEnabled(false);
 		
-		delegations.setOnItemSelectedListener(new OnItemSelectedListener() {
+		usernameInput = (EditText) findViewById(R.id.username_input);
+		
+		delegationsSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -112,8 +126,10 @@ public class RegistrationActivity extends Activity{
 						RegisterInBackground rIB = new RegisterInBackground();
 						rIB.execute();
 					}
-					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(RegistrationActivity.this);
+					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 					prefs.edit().putBoolean("registered", true).commit();
+					prefs.edit().putString("username", usernameInput.getText().toString()).commit();
+					prefs.edit().putString("delegation", (String) delegationsSpinner.getSelectedItem()).commit();
 					startActivity(new Intent(RegistrationActivity.this,Accueil.class));
 				}
 			});
@@ -182,22 +198,21 @@ public class RegistrationActivity extends Activity{
 		int appVersion = getAppVersion(context);
 		Log.i(TAG, "Saving regId on app version " + appVersion);
 		SharedPreferences.Editor editor = prefs.edit();
+		System.out.println(regId);
 		editor.putString(PROPERTY_REG_ID, regId);
 		editor.putInt(PROPERTY_APP_VERSION, appVersion);
 		editor.commit();
 	}
 
 	private void sendRegistrationIdToBackend() throws ClientProtocolException, IOException {
-		String url = "http://1-dot-inlaid-span-809.appspot.com/registration";
 		HttpClient client = new DefaultHttpClient();
-
-		HttpPost post = new HttpPost(url);
-
-		List<NameValuePair> liste = new ArrayList<NameValuePair>(6);
-		liste.add(new BasicNameValuePair("regId", regid));
-		liste.add(new BasicNameValuePair("delegation", delegation));
-		post.setEntity(new UrlEncodedFormEntity(liste, "UTF-8"));
-
+		HttpPost post  = new HttpPost("http://cartel2015.com/fr/perso/notifs/sendtoken.php");
+		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("token", "essai"));
+		params.add(new BasicNameValuePair("delegation", (String) delegationsSpinner.getSelectedItem()));
+		params.add(new BasicNameValuePair("system", "Android"));
+		post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 		client.execute(post);
 	}
 
@@ -233,6 +248,20 @@ public class RegistrationActivity extends Activity{
 			return msg;
 		}
 
+	}
+
+	@Override
+	public void onLoadFinished(final ArrayList<String> delegations) {
+		handler.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				delegationsSpinner.setAdapter(new SpinnerDelegationChoiceAdapter(RegistrationActivity.this, delegations));
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				prefs.edit().putStringSet("delegations", new HashSet<String>(delegations)).commit();
+			}
+		});
+		
 	}
 
 

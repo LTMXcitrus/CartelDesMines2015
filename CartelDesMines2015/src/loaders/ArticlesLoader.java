@@ -17,7 +17,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cartel.mines.nantes2015.R;
+import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import beans.Article;
 import tools.ArticlesImagesLoaderListener;
 import tools.ArticlesLoaderListener;
@@ -26,11 +29,13 @@ public class ArticlesLoader extends Thread{
 
 	ArticlesLoaderListener handlerArticles;
 	ArticlesImagesLoaderListener handlerImages;
-	
-	
-	public ArticlesLoader(ArticlesLoaderListener handlerArticles, ArticlesImagesLoaderListener handlerImages){
+	Context context;
+
+
+	public ArticlesLoader(Context context, ArticlesLoaderListener handlerArticles, ArticlesImagesLoaderListener handlerImages){
 		this.handlerArticles = handlerArticles;
 		this.handlerImages = handlerImages;
+		this.context=context;
 	}
 
 	@Override
@@ -38,35 +43,37 @@ public class ArticlesLoader extends Thread{
 		try {
 			ArrayList<Article> articles = new ArrayList<Article>();
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/articles");
+			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/getArticlesArray.php");
 			HttpResponse r = client.execute(get);
-			
+
 			String json = EntityUtils.toString(r.getEntity());
-			JSONObject objectJson = new JSONObject(json);
-			JSONArray arrayClassement = objectJson.getJSONArray("Articles");
+
+			JSONArray arrayClassement = new JSONArray(json);
 			for(int i=0; i<arrayClassement.length();  i++){
 				JSONObject object = arrayClassement.getJSONObject(i);
 				Article article = Article.createArticleFromJson(object);
 				articles.add(article);
 			}
-			
+
 			handlerArticles.onLoadFinished(articles);
 			for(int i=0; i< articles.size(); i++){
 				Article article = articles.get(i);
-				
-				URL url = new URL(article.getThumbnailURL());
-		        HttpURLConnection connection = (HttpURLConnection) url
-		                .openConnection();
-		        connection.setDoInput(true);
-		        connection.connect();
-				InputStream stream = connection.getInputStream();
-				handlerImages.onImageLoadFinished(i,BitmapFactory.decodeStream(stream));
+				if(article.getThumbnailURL().isEmpty()){
+					handlerImages.onImageLoadFinished(i, BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher));
+				}else{
+					URL url = new URL(article.getThumbnailURL());
+					HttpURLConnection connection = (HttpURLConnection) url
+							.openConnection();
+					connection.setDoInput(true);
+					connection.connect();
+					InputStream stream = connection.getInputStream();
+					handlerImages.onImageLoadFinished(i,BitmapFactory.decodeStream(stream));
+				}
 			}
-			
-			
+
+
 		} catch (IOException | JSONException | ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 

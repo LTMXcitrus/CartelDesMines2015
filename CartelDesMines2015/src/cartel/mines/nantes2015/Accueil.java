@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -81,9 +82,12 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 		mDrawerLayout = mNavigationDrawerFragment.getDrawerLayout();
-		
+
 		if(getIntent().hasExtra("carte")){
 			onNavigationDrawerItemSelected(1);
+		}
+		if(getIntent().hasExtra("key")){
+			onNavigationDrawerItemSelected(PICTURES);
 		}
 
 		//Set up the ViewPager for Results
@@ -151,6 +155,12 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 			fragmentManager.beginTransaction()
 			.replace(R.id.container, FragmentArticles.newInstance()).commit();
 		}
+		if(position == PICTURES){
+			setActionBarColorFromId(R.color.bleu_cartel);
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			fragmentManager.beginTransaction()
+			.replace(R.id.container, ImageThreadFragment.newInstance()).commit();
+		}
 		if(position == MEDIASHARE){
 			startActivity(new Intent(Accueil.this,PicturesUploader.class));
 		}
@@ -201,7 +211,7 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 		return super.onOptionsItemSelected(item);
 	}
 
-	
+
 	/**
 	 * 
 	 * @return true if the device is registered to the backend, false otherwise.
@@ -231,10 +241,12 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 	}
 
 	public void setActionBarColorFromId(int id){
+		actionBar = getSupportActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(id)));
 	}
 
 	public void setMyActionBarTitle(int position){
+		actionBar = getSupportActionBar();
 		actionBar.setTitle(getResources().getStringArray(R.array.action_bar_titles)[position]);
 	}
 
@@ -249,6 +261,15 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 			mDrawerLayout.openDrawer(Gravity.LEFT);
 		}
 
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event){
+		if ( keyCode == KeyEvent.KEYCODE_MENU ) {
+			mDrawerLayout.openDrawer(Gravity.LEFT);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 

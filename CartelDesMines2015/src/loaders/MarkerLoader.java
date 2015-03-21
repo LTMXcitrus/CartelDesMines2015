@@ -22,12 +22,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerLoader extends Thread{
+	
+	//TODO set to webservices
+	//TODO correction of the webservices (at least one bad pair of coordonates)
 
 	private URL urlCible = null;
 	private AsyncListener delegate = null;
 	private static final String SPORT = "sport";
 	private static final String LOGEMENT = "logement";
-	private static final String REPAS = "repas";
 	private static final String SOIREE = "soiree";
 
 	public MarkerLoader(URL u, AsyncListener l){

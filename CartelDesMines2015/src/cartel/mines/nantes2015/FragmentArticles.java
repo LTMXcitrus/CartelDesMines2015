@@ -1,6 +1,8 @@
 package cartel.mines.nantes2015;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import loaders.ArticlesLoader;
 import loaders.ResultatsLoader;
@@ -47,7 +49,7 @@ public class FragmentArticles extends ListFragment implements ArticlesImagesLoad
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		final ArticlesLoader loader = new ArticlesLoader(this,this);
+		final ArticlesLoader loader = new ArticlesLoader(getActivity(),this,this);
 		loader.start();
 		imagesThumbnail = new ArrayList<Bitmap>();
 		
@@ -70,6 +72,7 @@ public class FragmentArticles extends ListFragment implements ArticlesImagesLoad
 	@Override
 	public void onLoadFinished(final ArrayList<Article> articles) {
 		
+		Collections.sort(articles);
 		this.articles=articles;
 		
 		list.setOnItemClickListener(new OnItemClickListener() {

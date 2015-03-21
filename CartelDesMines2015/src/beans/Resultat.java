@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 public abstract class Resultat {
 	
-	public abstract Resultat createFromJson(JSONObject json) throws JSONException, ParseException;
+	public abstract Resultat createFromJson(JSONObject jsonn, String date) throws JSONException, ParseException;
 	
 	public abstract String getSport();
 

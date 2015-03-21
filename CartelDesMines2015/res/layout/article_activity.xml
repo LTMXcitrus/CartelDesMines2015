@@ -17,7 +17,7 @@
             android:layout_alignParentTop="true"
             android:layout_margin="3dp"
             android:adjustViewBounds="true"
-            android:scaleType="fitStart" />
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/entete"

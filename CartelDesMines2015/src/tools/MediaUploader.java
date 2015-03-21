@@ -17,39 +17,36 @@ import org.apache.http.util.EntityUtils;
 public class MediaUploader extends Thread{
 	
 	String pathToFile;
-	String fileName;
+	String commentaire;
+	String auteur;
 	MediaUploaderListener handler;
 	
-	public MediaUploader(String pathToFile,String fileName, MediaUploaderListener handler) {
+	public MediaUploader(String pathToFile,String commentaire, String auteur, MediaUploaderListener handler) {
 		super();
 		this.pathToFile = pathToFile;
-		this.fileName = fileName;
+		this.commentaire = commentaire;
 		this.handler = handler;
+		this.auteur=auteur;
 	}
 
 	@Override
 	public void run(){
 		try {
-			// On récupère l'Url à laquelle uploader le media.
 			HttpClient client = new DefaultHttpClient();
-			HttpGet getUploadUrl = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/getmediauploadurl");
-
-			HttpResponse responseGetUploadUrl = client.execute(getUploadUrl);
-			String uploadUrl = EntityUtils.toString(responseGetUploadUrl.getEntity());
-			
-			//On poste le media vers l'url obtenue
-			HttpPost postMedia = new HttpPost(uploadUrl);
+			HttpPost postMedia = new HttpPost("http://cartel2015.com/fr/perso/imagethread/handleSentImage.php");
 			
 			FileBody fileBody  = new FileBody(new File(pathToFile));
 			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
 			
 			builder.addPart("file", fileBody);
-			builder.addPart("name", new StringBody(fileName));
+			builder.addPart("commentaire", new StringBody(commentaire));
+			builder.addPart("auteur", new StringBody(auteur));
 			HttpEntity entity = builder.build();
 			postMedia.setEntity(entity);
 			HttpResponse res = client.execute(postMedia);
 			
-			handler.onUploadFinished(res);
+			handler.onUploadFinished(res.getStatusLine().getStatusCode(),
+					EntityUtils.toString(res.getEntity()));
 			
 			
 		} catch (IOException e) {

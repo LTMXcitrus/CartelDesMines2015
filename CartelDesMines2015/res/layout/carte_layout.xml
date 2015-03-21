@@ -44,6 +44,7 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginTop="3dp"
+                android:textColor="@color/jaune_cartel"
                 android:background="@drawable/mapbutton"
                 android:text="@string/sports" />
 
@@ -52,6 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
+                android:textColor="@color/bleu_cartel"
                 android:background="@drawable/mapbutton"
                 android:text="@string/soirees" />
 
@@ -60,6 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="3dp"
+                android:textColor="@color/rouge_cartel"
                 android:background="@drawable/mapbutton"
                 android:text="@string/logements" />
         </LinearLayout>
