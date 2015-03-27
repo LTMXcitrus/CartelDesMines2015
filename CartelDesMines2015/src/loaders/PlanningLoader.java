@@ -44,9 +44,9 @@ public class PlanningLoader extends Thread{
 			ArrayList<CalendarEvent> fourthDayEvent = new ArrayList<CalendarEvent>();
 
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/calendar");
+			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/static/calendar.json");
 			HttpResponse r = client.execute(get);
-			String json = EntityUtils.toString(r.getEntity());
+			String json = EntityUtils.toString(r.getEntity(), "UTF-8");
 
 			JSONObject calendar = new JSONObject(json);
 			JSONArray events = calendar.getJSONArray("Calendar");

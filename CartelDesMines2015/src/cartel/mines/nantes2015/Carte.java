@@ -10,7 +10,10 @@ import tools.AsyncListener;
 import tools.MyInfoWindowAdapterListener;
 import tools.SearchInMarkers;
 import adapters.MarkerSearchListAdapter;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,6 +24,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnCloseListener;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,36 +68,42 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.carte_layout);
-		
+
 		ActionBar actionBar = getSupportActionBar();
 
 		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
 		actionBar.setDisplayHomeAsUpEnabled(true);
+		if(!Accueil.isDeviceConnected(this)){
+			
+			notConnectedDialog(this);
+			
+		}else{
 
-		MarkerLoader getMarkers = null;
-		try {
-			getMarkers = new MarkerLoader(new URL("http://cartel2015.com/fr/perso/webservices/static/poi.json"), this);
-		} catch (MalformedURLException e) {
-			System.out.println(e);
+			MarkerLoader getMarkers = null;
+			try {
+				getMarkers = new MarkerLoader(new URL("http://cartel2015.com/fr/perso/webservices/static/poi.json"), this);
+			} catch (MalformedURLException e) {
+				System.out.println(e);
+			}
+			getMarkers.start();
+
+			map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+			map.setMyLocationEnabled(true);
+			map.animateCamera(CameraUpdateFactory.newLatLngBounds(getAboveNantes(),400,400,1));
+
+			sportsPoiVisibility = (Button) findViewById(R.id.sportsvisibility);
+			sportsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.SPORT));
+			repasPoiVisibity = (Button) findViewById(R.id.repasvisibility);
+			repasPoiVisibity.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.SOIREE));
+			logementsPoiVisibility = (Button) findViewById(R.id.logementsvisibility);
+			logementsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.LOGEMENT));
+
+			emptyList = (TextView) findViewById(R.id.empty_list_item_search_list);
+			emptyList.setVisibility(View.GONE);
+
+			markerSearchResultsList =(ListView) findViewById(R.id.markerSearchResultsList);
+			markerSearchResultsList.setVisibility(View.GONE);
 		}
-		getMarkers.start();
-
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-		map.setMyLocationEnabled(true);
-		map.animateCamera(CameraUpdateFactory.newLatLngBounds(getAboveNantes(),400,400,1));
-
-		sportsPoiVisibility = (Button) findViewById(R.id.sportsvisibility);
-		sportsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.SPORT));
-		repasPoiVisibity = (Button) findViewById(R.id.repasvisibility);
-		repasPoiVisibity.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.SOIREE));
-		logementsPoiVisibility = (Button) findViewById(R.id.logementsvisibility);
-		logementsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.LOGEMENT));
-
-		emptyList = (TextView) findViewById(R.id.empty_list_item_search_list);
-		emptyList.setVisibility(View.GONE);
-
-		markerSearchResultsList =(ListView) findViewById(R.id.markerSearchResultsList);
-		markerSearchResultsList.setVisibility(View.GONE);
 	}
 
 
@@ -284,7 +294,7 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 				if(visibilityType.equals(SOIREE)){
 					((Button) v).setTextColor(getResources().getColor(R.color.bleu_cartel));
 				}
-				
+
 			}
 			else{
 				((Button) v).setTextColor(Color.GRAY);
@@ -303,5 +313,22 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	public void notConnectedDialog(Context context){
+		Builder notConnected= new AlertDialog.Builder(context);
+		notConnected.setCancelable(true);
+		notConnected.setPositiveButton("Réessayer", new DialogInterface.OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog,
+					int which) {
+				recreate();				
+			}
+		});
+		LayoutInflater factory = LayoutInflater.from(context);
+		final View notconnectedDialog = factory.inflate(R.layout.device_not_connected_dialog, null);
+		notConnected.setView(notconnectedDialog);
+		notConnected.setTitle("Non connecté");
+		notConnected.show();
 	}
 }

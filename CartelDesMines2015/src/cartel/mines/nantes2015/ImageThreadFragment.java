@@ -31,7 +31,7 @@ public class ImageThreadFragment extends ListFragment implements ImageThreadList
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,	Bundle savedInstanceState){
-		View convertView =inflater.inflate(R.layout.fragment_resultats, container, false);
+		View convertView =inflater.inflate(R.layout.listfragment, container, false);
 		return convertView;
 	}
 

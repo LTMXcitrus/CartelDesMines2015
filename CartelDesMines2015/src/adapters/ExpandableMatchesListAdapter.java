@@ -1,7 +1,7 @@
 package adapters;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import cartel.mines.nantes2015.CourseActivity;
 import cartel.mines.nantes2015.R;
@@ -14,36 +14,89 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.view.View.OnClickListener;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-public class ResultatsListAdapter extends ArrayAdapter<Resultat>{
-
-	private static final int resourceIdCourse = R.layout.course_item_row;
+public class ExpandableMatchesListAdapter extends BaseExpandableListAdapter{
 
 	Context context;
-	int resource;
-	List<Resultat> objects;
+	HashMap<String, ArrayList<Resultat>> objects;
+	String[] headers = {"LUNDI 13","DIMANCHE 12","SAMEDI 11"  };
 
-	public ResultatsListAdapter(Context context, int resource, List<Resultat> objects) {
-		super(context, resource, objects);
-		Collections.sort(objects);
+	public ExpandableMatchesListAdapter(Context context, ArrayList<Resultat> resultatsJour1, ArrayList<Resultat> resultatsJour2,
+			 ArrayList<Resultat> resultatsJour3) {
 		this.context=context;
-		this.resource=resource;
+		HashMap<String, ArrayList<Resultat>> objects = new HashMap<String, ArrayList<Resultat>>();
+		objects.put(headers[0], resultatsJour3);
+		objects.put(headers[1], resultatsJour2);
+		objects.put(headers[2], resultatsJour1);
 		this.objects=objects;
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent){
-		Resultat resultat = objects.get(position);
+	public int getGroupCount() {
+		return headers.length;
+	}
+
+	@Override
+	public int getChildrenCount(int groupPosition) {
+		return objects.get(headers[groupPosition]).size();
+	}
+
+	@Override
+	public Object getGroup(int groupPosition) {
+		return headers[groupPosition];
+	}
+
+	@Override
+	public Object getChild(int groupPosition, int childPosition) {
+		return objects.get(headers[groupPosition]).get(childPosition);
+	}
+
+	@Override
+	public long getGroupId(int groupPosition) {
+		return groupPosition;
+	}
+
+	@Override
+	public long getChildId(int groupPosition, int childPosition) {
+		return childPosition;
+	}
+
+	@Override
+	public boolean hasStableIds() {
+		return false;
+	}
+
+	@Override
+	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+		LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+
+		convertView = inflater.inflate(R.layout.list_header, parent, false);
+		TextView section = (TextView) convertView.findViewById(R.id.CalendarDayListSection);
+
+		if(objects.get(headers[groupPosition]).isEmpty()){
+			section.setText(headers[groupPosition] + " - Vide");
+		}
+		else{
+			section.setText(headers[groupPosition]);
+		}
+		section.setTextColor(context.getResources().getColor(R.color.orange_cartel));
+
+		return convertView;
+	}
+
+	@Override
+	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+		Resultat resultat = (Resultat) getChild(groupPosition, childPosition);
 		Typeface type = Typeface.createFromAsset(context.getAssets(),"fonts/StardusterCondensedModified.ttf");
 		if(resultat instanceof Match){
 
 			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
 
-			convertView = inflater.inflate(resource, parent, false);
+			convertView = inflater.inflate(R.layout.matches_list_item, parent, false);
 
 
 
@@ -65,17 +118,19 @@ public class ResultatsListAdapter extends ArrayAdapter<Resultat>{
 			if(player2Text.length()>8){
 				player2.setTextSize(13);
 			}
+			if(match.getScorePlayer1()!=-1){
+				scores.setText(match.getScorePlayer1() + "-" + match.getScorePlayer2());
+			}
+			else{
+				scores.setText("EN ATTENTE");
+				scores.setTextSize(25);
+			}
 			
-			
-			
-			
-			scores.setText(match.getScorePlayer1() + "-" + match.getScorePlayer2());
 			
 			String sportOfMatch = match.getSport().replace("%20", " ");
 			sport.setText(sportOfMatch);
 			matchType.setText(match.getMatchType());
 
-			
 			scores.setTypeface(type);
 
 			convertView.setClickable(false);
@@ -87,7 +142,7 @@ public class ResultatsListAdapter extends ArrayAdapter<Resultat>{
 
 			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
 
-			convertView = inflater.inflate(resourceIdCourse, parent, false);
+			convertView = inflater.inflate(R.layout.course_item_row, parent, false);
 
 			TextView sport = (TextView) convertView.findViewById(R.id.course_sport);
 			sport.setText(course.getSport());
@@ -123,6 +178,11 @@ public class ResultatsListAdapter extends ArrayAdapter<Resultat>{
 		}
 
 		return convertView;
+	}
+
+	@Override
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		return true;
 	}
 
 }

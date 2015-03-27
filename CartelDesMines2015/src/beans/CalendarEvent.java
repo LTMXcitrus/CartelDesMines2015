@@ -159,7 +159,7 @@ public class CalendarEvent implements Serializable, Comparable<CalendarEvent>{
 		if(this.getDayOfMonth() < another.getDayOfMonth()){
 			return -1;
 		}
-		else if(this.getDayOfMonth() > another .dayOfMonth){
+		else if(this.getDayOfMonth() > another.getDayOfMonth()){
 			return 1;
 		}
 		else{

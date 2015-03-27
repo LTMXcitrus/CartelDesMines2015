@@ -25,9 +25,6 @@ import tools.ImageThreadListener;
 
 public class ImageThreadLoader extends Thread{
 
-	//TODO set to webservices
-	//TODO create Webservices
-
 	ImageThreadListener handler;
 
 	public ImageThreadLoader(ImageThreadListener handler){
@@ -45,7 +42,7 @@ public class ImageThreadLoader extends Thread{
 
 			HttpResponse r = client.execute(get);
 
-			String json = EntityUtils.toString(r.getEntity());
+			String json = EntityUtils.toString(r.getEntity(), "UTF-8");
 
 			JSONObject imagesJSON = new JSONObject(json);
 			JSONObject entries = imagesJSON.getJSONObject("entries");
@@ -61,21 +58,6 @@ public class ImageThreadLoader extends Thread{
 
 
 			handler.onLoadFinished(images,bitmaps);
-
-			/*for(Image image : images){
-				
-				URL url = new URL(image.getThumbnailUrl());
-
-				HttpURLConnection connection = (HttpURLConnection) url
-						.openConnection();
-				connection.setDoInput(true);
-				connection.connect();
-				InputStream stream;
-
-				stream = connection.getInputStream();
-				bitmaps.add(BitmapFactory.decodeStream(stream));
-				handler.onLoadFinished(images, bitmaps);
-			}*/
 
 		} catch (IOException | JSONException | ParseException e) {
 			e.printStackTrace();

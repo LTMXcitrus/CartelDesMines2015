@@ -40,7 +40,7 @@ public class FragmentResultatsDelegation extends ListFragment implements SportsL
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,	Bundle savedInstanceState) {
 
-		return inflater.inflate(R.layout.fragment_resultats, container, false);
+		return inflater.inflate(R.layout.listfragment, container, false);
 
 	}
 
@@ -93,9 +93,14 @@ public class FragmentResultatsDelegation extends ListFragment implements SportsL
 	}
 
 	@Override
-	public void onMatchesFilteredAvailable(ArrayList<Resultat> resultats) {
-		Intent intent = new Intent(getActivity(),MatchesParSportsActivity.class);
-		intent.putExtra("matches", resultats);
+	public void onMatchesFilteredAvailable(ArrayList<Resultat> resultatsJour1,
+			ArrayList<Resultat> resultatsJour2,
+			ArrayList<Resultat> resultatsJour3) {
+		Intent intent =new Intent(getActivity(),MatchesParSportsActivity.class);
+		intent.putExtra("matchesJour1", resultatsJour1);
+		intent.putExtra("matchesJour2", resultatsJour2);
+		intent.putExtra("matchesJour3", resultatsJour3);
 		startActivity(intent);
+		
 	}
 }

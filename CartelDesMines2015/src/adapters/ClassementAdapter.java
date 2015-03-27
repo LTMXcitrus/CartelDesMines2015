@@ -30,12 +30,12 @@ public class ClassementAdapter extends ArrayAdapter<Classement>{
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent){
-		if(convertView==null){
+		
 
 			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
 
 			convertView = inflater.inflate(resource, parent, false);
-		}
+		
 		TextView classement = (TextView) convertView.findViewById(R.id.classement);
 		TextView ville = (TextView) convertView.findViewById(R.id.ville);
 		TextView points = (TextView) convertView.findViewById(R.id.points);
@@ -44,8 +44,14 @@ public class ClassementAdapter extends ArrayAdapter<Classement>{
 		classement.setTypeface(type);
 		points.setTypeface(type);
 		
-		classement.setText(Integer.toString(objects.get(position).getRank()));
-		ville.setText(objects.get(position).getTeam());
+		classement.setText(Integer.toString(position+1));
+		
+		String team = objects.get(position).getTeam();
+		ville.setText(team);
+		if(team.length()>10){
+			ville.setTextSize(19);
+		}
+		
 		points.setText(Integer.toString(objects.get(position).getPoints()) + " " + "PTS");
 		
 		if(position==0){

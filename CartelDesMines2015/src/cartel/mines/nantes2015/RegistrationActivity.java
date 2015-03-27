@@ -31,7 +31,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -40,6 +43,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -84,9 +88,6 @@ public class RegistrationActivity extends Activity implements DelegationsListLoa
 		
 		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
 		
-		delegationsString = getResources().getStringArray(R.array.delegations);
-		
-		
 		erreur  = (TextView) findViewById(R.id.registration_explication);
 		
 		delegationsSpinner = (Spinner) findViewById(R.id.delegation_choice_registration);
@@ -95,19 +96,22 @@ public class RegistrationActivity extends Activity implements DelegationsListLoa
 		validate.setEnabled(false);
 		
 		usernameInput = (EditText) findViewById(R.id.username_input);
-		
-		delegationsSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
+		usernameInput.addTextChangedListener(new TextWatcher() {
+			
 			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				delegation = delegationsString[position];
-				validate.setEnabled(true);
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				String input = usernameInput.getText().toString();
+				if(input.isEmpty()){
+					validate.setEnabled(false);
+				}else{
+					validate.setEnabled(true);
+				}
 			}
-
+			
 			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-				validate.setEnabled(false);
-			}
+			public void beforeTextChanged(CharSequence s, int start, int count,	int after) {}
+			@Override
+			public void afterTextChanged(Editable s) {}
 		});
 
 		context = getApplicationContext();
@@ -209,7 +213,7 @@ public class RegistrationActivity extends Activity implements DelegationsListLoa
 		HttpPost post  = new HttpPost("http://cartel2015.com/fr/perso/notifs/sendtoken.php");
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("token", "essai"));
+		params.add(new BasicNameValuePair("token", regid));
 		params.add(new BasicNameValuePair("delegation", (String) delegationsSpinner.getSelectedItem()));
 		params.add(new BasicNameValuePair("system", "Android"));
 		post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));

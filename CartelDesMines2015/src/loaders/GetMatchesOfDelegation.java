@@ -10,6 +10,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,26 +31,36 @@ public class GetMatchesOfDelegation extends Thread{
 	@Override
 	public void run() {
 		try {
-			ArrayList<Resultat> resultats = new ArrayList<Resultat>();
+			ArrayList<Resultat> resultatsJour1 = new ArrayList<Resultat>();
+			ArrayList<Resultat> resultatsJour2 = new ArrayList<Resultat>();
+			ArrayList<Resultat> resultatsJour3 = new ArrayList<Resultat>();
 			delegation = delegation.replace(" ", "%20");
 
 			HttpClient client = new DefaultHttpClient();				
 			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/getMatchesByDelegation.php?delegation=" + delegation );
 			HttpResponse r = client.execute(get);
 			
-			String json = EntityUtils.toString(r.getEntity());
-			JSONObject objectJson = new JSONObject(json);
-			JSONObject entries = objectJson.getJSONObject("entries");
-			Iterator<String> keys = entries.keys();
-			while(keys.hasNext()){
-				String key = keys.next();
-				JSONObject entry = entries.getJSONObject(key);
+			String json = EntityUtils.toString(r.getEntity(), "UTF-8");
+			
+			JSONArray entries = new JSONArray(json);
+			for(int i=0; i<entries.length(); i++){
+				JSONObject entry = entries.getJSONObject(i);
 				Match match = new Match();
-				match = match.createFromJson(entry, key);
-				resultats.add(match);
+				match = match.createFromJson(entry);
+				switch(match.getDayOfMonth()){
+				case 11:
+					resultatsJour1.add(match);
+					break;
+				case 12:
+					resultatsJour2.add(match);
+					break;
+				case 13:
+					resultatsJour3.add(match);
+					break;
+				}
 			}
 			
-			handler.onMatchesFilteredAvailable(resultats);
+			handler.onMatchesFilteredAvailable(resultatsJour1, resultatsJour2, resultatsJour3);
 			
 		} catch (IOException | JSONException | ParseException e) {
 			System.out.println(e);

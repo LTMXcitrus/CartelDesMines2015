@@ -1,9 +1,14 @@
 package cartel.mines.nantes2015;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -168,7 +173,7 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 			setActionBarColorFromId(R.color.rouge_cartel);
 			FragmentManager fragmentManager = getSupportFragmentManager();
 			fragmentManager.beginTransaction()
-			.replace(R.id.container, FragmentSponsors.newInstance()).commit();
+			.replace(R.id.container, FragmentSponsorsWebview.newInstance()).commit();
 		}
 		if(position == REGLAGES){
 			setActionBarColorFromId(R.color.rouge_cartel);
@@ -271,8 +276,26 @@ public class Accueil extends ActionBarActivity implements NavigationDrawerFragme
 		}
 		return super.onKeyDown(keyCode, event);
 	}
-
-
-
-
+	
+	public void notConnectedDialog(Context context){
+		Builder notConnected= new AlertDialog.Builder(context);
+		notConnected.setCancelable(true);
+		notConnected.setPositiveButton("Réessayer", new DialogInterface.OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog,
+					int which) {
+				recreate();				
+			}
+		});
+		LayoutInflater factory = LayoutInflater.from(context);
+		final View notconnectedDialog = factory.inflate(R.layout.device_not_connected_dialog, null);
+		notConnected.setView(notconnectedDialog);
+		notConnected.setTitle("Non connecté");
+		notConnected.show();
+	}
+	
+	public static boolean isDeviceConnected(Context context) {
+		ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		return (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isAvailable() && cm.getActiveNetworkInfo().isConnected());
+	}
 }

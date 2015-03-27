@@ -46,7 +46,7 @@ public class ArticlesLoader extends Thread{
 			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/getArticlesArray.php");
 			HttpResponse r = client.execute(get);
 
-			String json = EntityUtils.toString(r.getEntity());
+			String json = EntityUtils.toString(r.getEntity(), "UTF-8");
 
 			JSONArray arrayClassement = new JSONArray(json);
 			for(int i=0; i<arrayClassement.length();  i++){

@@ -113,10 +113,11 @@ public class Course extends Resultat implements Serializable{
 	}
 	
 	@Override
-	public Course createFromJson(JSONObject json, String date) throws JSONException, ParseException{
+	public Course createFromJson(JSONObject json) throws JSONException, ParseException{
 		String sport = json.getString("sport");
 			
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		String date = json.getString("date");
 		Date utilDate = df.parse(date);
 		DateTime jodaDate = new DateTime(utilDate);
 		
@@ -147,6 +148,40 @@ public class Course extends Resultat implements Serializable{
 	
 	public Participant getTroisieme(){
 		return this.getParticipants().get(2);
+	}
+
+
+	@Override
+	public int compareTo(Resultat another) {
+		int result = 0;
+		if(this.getDayOfMonth() < another.getDayOfMonth()){
+			result = -1;
+		}
+		else if(this.getDayOfMonth() > another.getDayOfMonth()){
+			result = 1;
+		}
+		else{
+			if(this.getHourOfDay() < another.getHourOfDay()){
+				result = -1;
+			}
+			else if(this.getHourOfDay() > another.getHourOfDay()){
+				result = 1;
+			}
+			else{
+				if(this.getMinuteOfHour() < another.getMinuteOfHour()){
+					result = -1;
+				}
+				else if(this.getMinuteOfHour() > another.getMinuteOfHour()){
+					result = 1;
+				}
+				else{
+					result = 0;
+				}
+			}
+			
+		}
+		
+		return result;
 	}
 
 }

@@ -42,7 +42,7 @@ public class FragmentArticles extends ListFragment implements ArticlesImagesLoad
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,	Bundle savedInstanceState) {
 		
-		return inflater.inflate(R.layout.fragment_resultats, container, false);
+		return inflater.inflate(R.layout.listfragment, container, false);
 		
 	}
 	

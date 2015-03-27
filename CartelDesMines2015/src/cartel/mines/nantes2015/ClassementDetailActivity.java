@@ -18,6 +18,7 @@ public class ClassementDetailActivity extends Activity{
 		getActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.vert_cartel)));
 		
 		Classement classement = (Classement) getIntent().getSerializableExtra("classement");
+		int rank = getIntent().getIntExtra("rank", 1);
 		
 		TextView ville = (TextView) findViewById(R.id.detailMatchClassement);
 		TextView points = (TextView) findViewById(R.id.detailClassementPoints);
@@ -26,7 +27,7 @@ public class ClassementDetailActivity extends Activity{
 		TextView defaitesNombre = (TextView) findViewById(R.id.detailMatchDefaitesNombre);
 		
 		Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/StardusterCondensedModified.ttf");
-		ville.setText(classement.getRank() + " - " + classement.getTeam().toUpperCase(Locale.FRANCE));
+		ville.setText(rank + " - " + classement.getTeam().toUpperCase(Locale.FRANCE));
 		ville.setTypeface(typeface);
 		
 		points.setText(classement.getPoints() + "  PTS");

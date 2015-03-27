@@ -1,42 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal" >
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/imagethread_auteur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="moi"
+        android:textColor="@color/bleu_cartel"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/imagethread_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="il y a 5h"
+        android:textColor="@color/bleu_cartel"
+        android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/imagethread_image"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_below="@+id/imagethread_auteur"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:src="@drawable/logo_cartel_et_emn_grand" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/imagethread_comment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/imagethread_image"
+        android:layout_alignParentBottom="true"
         android:layout_margin="5dp"
-        android:orientation="horizontal" >
+        android:gravity="center"
+        android:textSize="18sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:text="Quelle belle icone ! incroyable ce cartel ! lorem ipsum doloret sit amet, espectetur" />
 
-        <TextView
-            android:id="@+id/imagethread_auteur"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textColor="@color/bleu_cartel"
-            android:textSize="18sp"
-            android:layout_gravity="center_vertical"
-            android:text="moi" />
-
-        <TextView
-            android:id="@+id/imagethread_comment"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:ellipsize="end"
-            android:text="Quelle belle icone ! incroyable ce cartel ! lorem ipsum doloret sit amet, espectetur" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

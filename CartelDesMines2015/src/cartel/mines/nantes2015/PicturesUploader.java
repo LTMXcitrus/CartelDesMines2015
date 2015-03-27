@@ -151,8 +151,9 @@ public class PicturesUploader extends Activity implements MediaUploaderListener{
 		if(imageFile != null){
 
 			Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+			
 
-			fileUri = getImageContentUri(this, imageFile); 
+			fileUri = getImageContentUri(this, imageFile);
 
 			image.setImageBitmap(bitmap);
 		}

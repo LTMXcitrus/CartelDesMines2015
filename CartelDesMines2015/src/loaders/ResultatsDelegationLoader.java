@@ -20,8 +20,6 @@ import beans.Match;
 import beans.Resultat;
 
 public class ResultatsDelegationLoader extends Thread{
-	
-	//TODO create Webservices getDelegations.php
 
 	SportsLoaderListener handler;
 	String delegation;	
@@ -39,7 +37,7 @@ public class ResultatsDelegationLoader extends Thread{
 			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/getDelegations.php");
 			HttpResponse r = client.execute(get);
 
-			String json = EntityUtils.toString(r.getEntity());
+			String json = EntityUtils.toString(r.getEntity(), "UTF-8");
 			JSONArray objectJson = new JSONArray(json);
 			for(int i=0;i<objectJson.length(); i++){
 				JSONObject delegationObject = objectJson.getJSONObject(i);

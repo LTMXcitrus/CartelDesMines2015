@@ -18,7 +18,7 @@ public class Match extends Resultat implements Serializable{
 	private String sport;
 	private int hourOfDay;
 	private int minuteOfHour;
-	private int dayOhMonth;
+	private int dayOfMonth;
 	private String live;
 	private String player1;
 	private String player2;
@@ -29,14 +29,14 @@ public class Match extends Resultat implements Serializable{
 	public Match(){ }
 
 
-	public Match(String sport, int hourOfDay, int minuteOfHour, int dayOhMonth,
+	public Match(String sport, int hourOfDay, int minuteOfHour, int dayOfMonth,
 			String live, String player1, String player2, int scorePlayer1,
 			int scorePlayer2, String matchType) {
 		super();
 		this.sport = sport;
 		this.hourOfDay = hourOfDay;
 		this.minuteOfHour = minuteOfHour;
-		this.dayOhMonth = dayOhMonth;
+		this.dayOfMonth = dayOfMonth;
 		this.live = live;
 		this.player1 = player1;
 		this.player2 = player2;
@@ -46,12 +46,13 @@ public class Match extends Resultat implements Serializable{
 	}
 	
 	@Override
-	public Match createFromJson(JSONObject json, String date) throws JSONException, ParseException{
+	public Match createFromJson(JSONObject json) throws JSONException, ParseException{
 		
 		String sport = json.getString("sport");
 		
 		
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		String date = json.getString("date");
 		Date utilDate = df.parse(date);
 		DateTime jodaDate = new DateTime(utilDate);
 		int hourOfDay = jodaDate.getHourOfDay();
@@ -69,9 +70,9 @@ public class Match extends Resultat implements Serializable{
 		
 	}
 	
-	public Match createFromJson(JSONObject json, String date, String sport) throws JSONException, ParseException{
+	public Match createFromJson(JSONObject json, String sport) throws JSONException, ParseException{
 		json.put("sport", sport);
-		return createFromJson(json, date);
+		return createFromJson(json);
 	}
 
 
@@ -105,13 +106,13 @@ public class Match extends Resultat implements Serializable{
 	}
 
 
-	public int getDayOhMonth() {
-		return dayOhMonth;
+	public int getDayOfMonth() {
+		return dayOfMonth;
 	}
 
 
-	public void setDayOhMonth(int dayOhMonth) {
-		this.dayOhMonth = dayOhMonth;
+	public void setDayOfMonth(int dayOfMonth) {
+		this.dayOfMonth = dayOfMonth;
 	}
 
 
@@ -176,5 +177,39 @@ public class Match extends Resultat implements Serializable{
 	
 	public String toString(){
 		return this.getMatchType();
+	}
+
+
+	@Override
+	public int compareTo(Resultat another) {
+		int result = 0;
+		if(this.getDayOfMonth() < another.getDayOfMonth()){
+			result = -1;
+		}
+		else if(this.getDayOfMonth() > another.getDayOfMonth()){
+			result = 1;
+		}
+		else{
+			if(this.getHourOfDay() < another.getHourOfDay()){
+				result = -1;
+			}
+			else if(this.getHourOfDay() > another.getHourOfDay()){
+				result = 1;
+			}
+			else{
+				if(this.getMinuteOfHour() < another.getMinuteOfHour()){
+					result = -1;
+				}
+				else if(this.getMinuteOfHour() > another.getMinuteOfHour()){
+					result = 1;
+				}
+				else{
+					result = 0;
+				}
+			}
+			
+		}
+		
+		return result;
 	}
 }

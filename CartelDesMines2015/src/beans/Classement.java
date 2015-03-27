@@ -10,7 +10,6 @@ public class Classement implements Serializable, Comparable<Classement>{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int rank;
 	private String team;
 	private int points;
 	private int matchesplayed;
@@ -19,10 +18,9 @@ public class Classement implements Serializable, Comparable<Classement>{
 	private int losses;
 
 
-	public Classement(int rank, String team, int points, int matchesplayed,
+	public Classement(String team, int points, int matchesplayed,
 			int wins, int draws, int losses) {
 		super();
-		this.rank = rank;
 		this.team = team;
 		this.points = points;
 		this.matchesplayed = matchesplayed;
@@ -31,27 +29,14 @@ public class Classement implements Serializable, Comparable<Classement>{
 		this.losses = losses;
 	}
 
-	public static Classement createClassementFromJson(JSONObject json) throws JSONException{
-		int rank = json.getInt("rank");
-		String team = json.getString("team");
+	public static Classement createClassementFromJson(JSONObject json, String team) throws JSONException{
 		int points = json.getInt("points");
-		int matchesplayed = json.getInt("matchesplayed");
+		int matchesplayed = json.getInt("matchesPlayed");
 		int wins = json.getInt("wins");
 		int draws = json.getInt("draws");
 		int losses = json.getInt("losses");
-		return new Classement(rank, team, points, matchesplayed, wins, draws, losses);
+		return new Classement(team, points, matchesplayed, wins, draws, losses);
 	}
-
-
-	public int getRank() {
-		return rank;
-	}
-
-
-	public void setRank(int rank) {
-		this.rank = rank;
-	}
-
 
 	public String getTeam() {
 		return team;
@@ -119,10 +104,10 @@ public class Classement implements Serializable, Comparable<Classement>{
 
 	@Override
 	public int compareTo(Classement another) {
-		if(this.getRank() < another.getRank()){
+		if(this.getPoints() < another.getPoints()){
 			return -1;
 		}
-		else if(this.getRank() == another.getRank()){
+		else if(this.getPoints() == another.getPoints()){
 			return 0;
 		}
 		else{

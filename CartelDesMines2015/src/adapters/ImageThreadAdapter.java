@@ -2,7 +2,7 @@ package adapters;
 
 import java.util.List;
 
-import loaders.ImageThreadAsyncTask;
+import loaders.MyImageLoaderCache;
 import cartel.mines.nantes2015.R;
 import beans.Image;
 import android.app.Activity;
@@ -22,12 +22,15 @@ public class ImageThreadAdapter extends ArrayAdapter<Image>{
 	int resource;
 	List<Image> images;
 	List<Bitmap> bitmaps;
+	MyImageLoaderCache imageLoader;
 
 	public ImageThreadAdapter(Context context, int resource, List<Image> images) {
 		super(context, resource, images);
 		this.context=context;
 		this.resource=resource;
 		this.images=images;
+		imageLoader = new MyImageLoaderCache(context);
+    
 	}
 
 	public ImageThreadAdapter(Context context, int resource, List<Image> images, List<Bitmap> bitmaps){
@@ -47,12 +50,13 @@ public class ImageThreadAdapter extends ArrayAdapter<Image>{
 		ImageView imageView = (ImageView) convertView.findViewById(R.id.imagethread_image);
 		TextView auteur = (TextView) convertView.findViewById(R.id.imagethread_auteur);
 		TextView comment = (TextView) convertView.findViewById(R.id.imagethread_comment);
+		TextView elapsedTime = (TextView) convertView.findViewById(R.id.imagethread_date);
 
-
+		elapsedTime.setText(image.getElapsedTimeSincePublication());
 		auteur.setText(image.getAuteur());
 		comment.setText(image.getComment());
 		if(imageView!=null){
-			new ImageThreadAsyncTask(imageView).execute(image.getImageUrl());
+			imageLoader.DisplayImage(image.getThumbnailUrl(), imageView);
 		}
 
 		return convertView;

@@ -2,6 +2,7 @@ package loaders;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -17,11 +18,9 @@ import android.util.Log;
 import beans.Classement;
 
 public class ClassementLoader extends Thread{
-	
-	//TODO set to webservices
-	
+
 	ClassementListener handler;
-	
+
 	public ClassementLoader(ClassementListener handler){
 		this.handler=handler;
 	}
@@ -31,21 +30,27 @@ public class ClassementLoader extends Thread{
 		try {
 			//ArrayList to store the leaderboards
 			ArrayList<Classement> classements = new ArrayList<Classement>();
-			
+
 			//Preparing the HttpRequest
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/getArticlesList.php");
+			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/getLeaderboard.php");
+
 			HttpResponse r = client.execute(get);
-			
-			//Reading the httpResponse
-			String json = EntityUtils.toString(r.getEntity());
-			JSONObject objectJson = new JSONObject(json);
-			JSONArray arrayClassement = objectJson.getJSONArray("Leaderboards");
-			for(int i=0; i<arrayClassement.length(); i++){
-				JSONObject object = arrayClassement.getJSONObject(i);
-				classements.add(Classement.createClassementFromJson(object));
+
+			if(r.getStatusLine().getStatusCode()==200){
+
+				//Reading the httpResponse
+				String json = EntityUtils.toString(r.getEntity(), "UTF-8");
+				JSONObject objectJson = new JSONObject(json);
+				JSONObject entries = objectJson.getJSONObject("entries");
+				Iterator<String> keys = entries.keys();
+				while(keys.hasNext()){
+					String key = keys.next();
+					JSONObject entry = entries.getJSONObject(key);
+					classements.add(Classement.createClassementFromJson(entry, key));
+				}
 			}
-			
+
 			handler.onLoadFinished(classements);
 
 		} catch (IOException | JSONException e) {

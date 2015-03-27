@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MarkerLoader extends Thread{
 	
-	//TODO set to webservices
 	//TODO correction of the webservices (at least one bad pair of coordonates)
 
 	private URL urlCible = null;
@@ -43,23 +42,23 @@ public class MarkerLoader extends Thread{
 			ArrayList<String> types = new ArrayList<String>();
 
 			HttpClient client = new DefaultHttpClient();
-			HttpGet get = new HttpGet("http://1-dot-inlaid-span-809.appspot.com/pointsofinterest");
+			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/static/poi.json");
 			HttpResponse r = client.execute(get);
-			String json = EntityUtils.toString(r.getEntity());
+			String json = EntityUtils.toString(r.getEntity(), "UTF-8");
 			JSONObject service = new JSONObject(json);
-			JSONArray sport = service.getJSONArray("sport");
+			JSONArray sport = service.getJSONArray("Sports");
 
 
 			for(int i=0;i< sport.length();i++){
 				JSONObject marker = sport.getJSONObject(i);
-				String nom = new String(marker.getString("nom").getBytes("ISO-8859-1"), "UTF-8");
+				String nom = marker.getString("nom");
 				double latitude = Double.parseDouble(marker.getString("latitude"));
 				double longitude = Double.parseDouble(marker.getString("longitude"));
 				Location markerLocation = new Location("");
 				markerLocation.setLatitude(latitude);
 				markerLocation.setLongitude(longitude);
 
-				String snippet = new String(marker.getString("snippet").getBytes("ISO-8859-1"),"UTF-8");
+				String snippet = marker.getString("snippet");
 				String type = SPORT;
 				float hue_code=BitmapDescriptorFactory.HUE_YELLOW;
 				markersResult.add(createMarker(nom, latitude, longitude, snippet,hue_code));
@@ -67,19 +66,19 @@ public class MarkerLoader extends Thread{
 				types.add(type);
 			}
 
-			JSONArray logement = service.getJSONArray("hotels");
+			JSONArray logement = service.getJSONArray("Hôtels");
 			int length = markersResult.size();
 			for(int i=0; i<logement.length();i++){
 
 				JSONObject marker = logement.getJSONObject(i);
-				String nom = new String(marker.getString("nom").getBytes("ISO-8859-1"), "UTF-8");
+				String nom = marker.getString("nom");
 				double latitude = Double.parseDouble(marker.getString("latitude"));
 				double longitude = Double.parseDouble(marker.getString("longitude"));
 				Location markerLocation = new Location("");
 				markerLocation.setLatitude(latitude);
 				markerLocation.setLongitude(longitude);
 
-				String snippet = new String(marker.getString("snippet").getBytes("ISO-8859-1"),"UTF-8");
+				String snippet = marker.getString("snippet");
 				String type = LOGEMENT;
 				float hue_code=BitmapDescriptorFactory.HUE_RED;
 				markersResult.add(createMarker(nom, latitude, longitude, snippet,hue_code));
@@ -87,18 +86,18 @@ public class MarkerLoader extends Thread{
 				types.add(type);	
 			}
 			
-			JSONArray soiree = service.getJSONArray("soiree");
+			JSONArray soiree = service.getJSONArray("Soirées");
 			length = markersResult.size();
 			for(int i = 0; i<soiree.length();i++){
 				JSONObject marker = soiree.getJSONObject(i);
-				String nom = new String(marker.getString("nom").getBytes("ISO-8859-1"), "UTF-8");
+				String nom = marker.getString("nom");
 				double latitude = Double.parseDouble(marker.getString("latitude"));
 				double longitude = Double.parseDouble(marker.getString("longitude"));
 				Location markerLocation = new Location("");
 				markerLocation.setLatitude(latitude);
 				markerLocation.setLongitude(longitude);
 
-				String snippet = new String(marker.getString("snippet").getBytes("ISO-8859-1"),"UTF-8");
+				String snippet =marker.getString("snippet");
 				String type = SOIREE;
 				float hue_code=BitmapDescriptorFactory.HUE_BLUE;
 				markersResult.add(createMarker(nom, latitude, longitude, snippet,hue_code));

@@ -20,8 +20,6 @@ import beans.Resultat;
 
 public class SportsLoader extends Thread{
 	
-	//TODO set to webservices
-	
 	SportsLoaderListener handler;
 	
 	public SportsLoader(SportsLoaderListener handler){
@@ -36,7 +34,7 @@ public class SportsLoader extends Thread{
 			HttpGet get = new HttpGet("http://cartel2015.com/fr/perso/webservices/getSports.php");
 			HttpResponse r = client.execute(get);
 			
-			String json = EntityUtils.toString(r.getEntity());
+			String json = EntityUtils.toString(r.getEntity(), "UTF-8");
 			
 			
 			JSONArray arraySports = new JSONArray(json);

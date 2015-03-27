@@ -6,21 +6,24 @@ import loaders.ResultatsLoader;
 import tools.ResultatsListener;
 import beans.Match;
 import beans.Resultat;
+import adapters.ExpandableMatchesListAdapter;
 import adapters.ResultatsListAdapter;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
-public class FragmentMatchesResultats extends ListFragment implements ResultatsListener{
+public class FragmentMatchesResultats extends Fragment implements ResultatsListener{
 
-	ListView list;
+	ExpandableListView list;
 	ProgressDialog dialog;
 
 	public static FragmentMatchesResultats newInstance(){
@@ -32,8 +35,11 @@ public class FragmentMatchesResultats extends ListFragment implements ResultatsL
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,	Bundle savedInstanceState) {
+		View convertView = inflater.inflate(R.layout.fragment_resultats, container, false);
 		
-		return inflater.inflate(R.layout.fragment_resultats, container, false);
+		list = (ExpandableListView) convertView.findViewById(R.id.matches_list);
+		
+		return convertView;
 		
 	}
 
@@ -54,17 +60,20 @@ public class FragmentMatchesResultats extends ListFragment implements ResultatsL
 			}
 		});
 
-		list = getListView();
+		
 	}
 
 	@Override
-	public void onLoadFinished(final ArrayList<Resultat> resultats) {
+	public void onLoadFinished(final ArrayList<Resultat> resultatsJour1, final ArrayList<Resultat> resultatsJour2,
+			final ArrayList<Resultat> resultatsJour3) {
 		dialog.dismiss();
 		list.post(new Runnable() {
 
 			@Override
 			public void run() {
-				list.setAdapter(new ResultatsListAdapter(getActivity(), R.layout.matches_list_item, resultats));
+				ExpandableMatchesListAdapter adapter = new ExpandableMatchesListAdapter(getActivity(), resultatsJour1, resultatsJour2, resultatsJour3);
+				list.setAdapter(adapter);
+				list.expandGroup(adapter.getGroupCount()-1);
 			}
 		});
 	}

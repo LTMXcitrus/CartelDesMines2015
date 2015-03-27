@@ -32,7 +32,7 @@ public class DelegationsListLoader extends Thread{
 
 			HttpResponse r = client.execute(get);
 			
-			String json = EntityUtils.toString(r.getEntity());
+			String json = EntityUtils.toString(r.getEntity(), "UTF-8");
 			JSONArray delegationsJSON = new JSONArray(json);
 			
 			for(int i=0; i<delegationsJSON.length(); i++){

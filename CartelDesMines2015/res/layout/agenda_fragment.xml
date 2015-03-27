@@ -5,11 +5,10 @@
     android:orientation="vertical"
     android:gravity="center" >
 
-    <ListView
-        android:id="@+id/android:list"
+    <ExpandableListView
+        android:id="@+id/agendalist"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:columnWidth="55dp"
         android:layout_margin="5dp" />
 
 </LinearLayout>
