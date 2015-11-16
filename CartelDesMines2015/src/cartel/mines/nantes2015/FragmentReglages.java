@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import tools.DelegationsListLoaderCallback;
 import loaders.DelegationsListLoader;
+import tools.DelegationsListLoaderCallback;
 import adapters.SpinnerDelegationChoiceAdapter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,12 +18,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.TextView;
 
 public class FragmentReglages extends Fragment implements DelegationsListLoaderCallback{
 	

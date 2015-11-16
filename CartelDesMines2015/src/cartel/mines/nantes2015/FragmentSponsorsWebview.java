@@ -11,7 +11,7 @@ import android.webkit.WebView;
 @SuppressLint("SetJavaScriptEnabled")
 public class FragmentSponsorsWebview extends Fragment{
 	
-	private static final String SPONSORS_URL = "http://cartel2015.com/fr/perso/webservices/static/sponsors.php";
+	private static final String SPONSORS_URL = "http://cartel2015.com/fr/sponsors.html";
 	
 	WebView webView;
 	

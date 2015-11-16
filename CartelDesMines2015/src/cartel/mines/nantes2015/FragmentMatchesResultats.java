@@ -4,22 +4,17 @@ import java.util.ArrayList;
 
 import loaders.ResultatsLoader;
 import tools.ResultatsListener;
-import beans.Match;
-import beans.Resultat;
 import adapters.ExpandableMatchesListAdapter;
-import adapters.ResultatsListAdapter;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
+import beans.Resultat;
 
 public class FragmentMatchesResultats extends Fragment implements ResultatsListener{
 

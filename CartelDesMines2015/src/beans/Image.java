@@ -3,7 +3,6 @@ package beans;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.joda.time.DateTime;
@@ -27,12 +26,13 @@ public class Image implements Serializable, Comparable<Image>{
 	DateTime jodaDate;
 	int minutesOfHour;
 	int secondesOfMinute;
+	int monthOfYear;
 	String imageUrl;
 	String thumbnailUrl;
 
 
 	public Image(String auteur, String comment, int dayOfMonth, int hourOfDay,
-			int minutesOfHour, int secondesOfMinute, String imageUrl, String thumbnailUrl, DateTime jodaDate) {
+			int minutesOfHour, int secondesOfMinute, String imageUrl, String thumbnailUrl, DateTime jodaDate, int monthOfYear) {
 		super();
 		this.auteur = auteur;
 		this.comment = comment;
@@ -43,6 +43,7 @@ public class Image implements Serializable, Comparable<Image>{
 		this.thumbnailUrl=thumbnailUrl;
 		this.secondesOfMinute=secondesOfMinute;
 		this.jodaDate=jodaDate;
+		this.monthOfYear=monthOfYear;
 	}
 
 
@@ -268,6 +269,14 @@ public class Image implements Serializable, Comparable<Image>{
 	}
 
 
+	public int getMonthOfYear() {
+		return monthOfYear;
+	}
+
+
+	public void setMonthOfYear(int monthOfYear) {
+		this.monthOfYear = monthOfYear;
+	}
 
 
 	public static Image createImageFromJson(JSONObject json, String date) throws JSONException, ParseException{
@@ -280,49 +289,59 @@ public class Image implements Serializable, Comparable<Image>{
 		int hourOfDay = jodaDate.getHourOfDay();
 		int minutesOfHour = jodaDate.getMinuteOfHour();
 		int secondesOfMinute = jodaDate.getSecondOfMinute();
+		int monthOfYear = jodaDate.getMonthOfYear();
 		String filename= json.getString("filename");
 		String imageUrl = PREFIXE_HD+filename;
 		String thumbnailUrl = PREFIXE_COMP+filename;
 
-		return new Image(auteur, comment, dayOfMonth, hourOfDay, minutesOfHour, secondesOfMinute, imageUrl,thumbnailUrl,jodaDate);
+		return new Image(auteur, comment, dayOfMonth, hourOfDay, minutesOfHour, secondesOfMinute, imageUrl,thumbnailUrl,jodaDate,monthOfYear);
 	}
 
 
 	@Override
 	public int compareTo(Image another) {
-		if(this.getDayOfMonth()<another.getDayOfMonth()){
+		if(this.getMonthOfYear() < another.getMonthOfYear()){
 			return -1;
 		}
-		else if(this.getDayOfMonth()>another.getDayOfMonth()){
+		else if(this.getMonthOfYear() > another.getMonthOfYear()){
 			return 1;
 		}
 		else{
-			if(this.getHourOfDay()<another.getHourOfDay()){
+			if(this.getDayOfMonth()<another.getDayOfMonth()){
 				return -1;
 			}
-			else if(this.getHourOfDay()>another.getHourOfDay()){
+			else if(this.getDayOfMonth()>another.getDayOfMonth()){
 				return 1;
 			}
 			else{
-				if(this.getMinutesOfHour()<another.getMinutesOfHour()){
+				if(this.getHourOfDay()<another.getHourOfDay()){
 					return -1;
 				}
-				else if(this.getMinutesOfHour()>another.getMinutesOfHour()){
+				else if(this.getHourOfDay()>another.getHourOfDay()){
 					return 1;
-
 				}
 				else{
-					if(this.getSecondesOfMinute()<another.getSecondesOfMinute()){
+					if(this.getMinutesOfHour()<another.getMinutesOfHour()){
 						return -1;
 					}
-					else if(this.getSecondesOfMinute()>another.getSecondesOfMinute()){
+					else if(this.getMinutesOfHour()>another.getMinutesOfHour()){
 						return 1;
+
 					}
 					else{
-						return 0;
+						if(this.getSecondesOfMinute()<another.getSecondesOfMinute()){
+							return -1;
+						}
+						else if(this.getSecondesOfMinute()>another.getSecondesOfMinute()){
+							return 1;
+						}
+						else{
+							return 0;
+						}
 					}
 				}
 			}
+
 		}
 
 	}

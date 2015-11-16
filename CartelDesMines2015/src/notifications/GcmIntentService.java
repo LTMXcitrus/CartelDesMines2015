@@ -1,6 +1,5 @@
 package notifications;
 
-import loaders.ImageLoader;
 import tools.ImageLoaderListener;
 import android.app.IntentService;
 import android.app.NotificationManager;
@@ -9,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,7 +17,6 @@ import android.util.Log;
 import beans.Notification;
 import cartel.mines.nantes2015.Accueil;
 import cartel.mines.nantes2015.NotificationActivity;
-import cartel.mines.nantes2015.RegistrationActivity;
 import cartel.mines.nantes2015.R;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -109,7 +105,7 @@ public class GcmIntentService extends IntentService implements ImageLoaderListen
 		.setVibrate(pattern)
 		.setSound(sound).setLights(Color.BLUE, 500, 500)
 		.setAutoCancel(true);
-		contentIntent = PendingIntent.getActivity(this, 0, intent,PendingIntent.FLAG_ONE_SHOT);
+		contentIntent = PendingIntent.getActivity(this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
 		mBuilder.setContentIntent(contentIntent);
 		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

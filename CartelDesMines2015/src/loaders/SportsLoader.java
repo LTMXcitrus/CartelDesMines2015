@@ -1,7 +1,6 @@
 package loaders;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
@@ -14,9 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tools.SportsLoaderListener;
-import beans.Course;
-import beans.Match;
-import beans.Resultat;
 
 public class SportsLoader extends Thread{
 	
@@ -49,10 +45,6 @@ public class SportsLoader extends Thread{
 		} catch (IOException | JSONException e) {
 			System.out.println(e);
 		}
-	}
-	
-	private boolean isCourse(JSONObject json){
-		return json.has("participants");
 	}
 
 }

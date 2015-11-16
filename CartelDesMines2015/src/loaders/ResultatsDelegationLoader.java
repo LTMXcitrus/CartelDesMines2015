@@ -1,7 +1,6 @@
 package loaders;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import org.apache.http.HttpResponse;
@@ -14,10 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import tools.SportsLoaderListener;
-import android.util.Log;
-import beans.Course;
-import beans.Match;
-import beans.Resultat;
 
 public class ResultatsDelegationLoader extends Thread{
 

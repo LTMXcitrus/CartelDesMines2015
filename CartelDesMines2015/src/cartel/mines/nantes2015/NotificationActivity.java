@@ -1,15 +1,14 @@
 package cartel.mines.nantes2015;
 
-import tools.ImageLoaderListener;
 import loaders.ImageLoader;
-import beans.Notification;
+import tools.ImageLoaderListener;
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import beans.Notification;
 
 public class NotificationActivity extends Activity implements ImageLoaderListener{
 	
@@ -35,6 +34,8 @@ public class NotificationActivity extends Activity implements ImageLoaderListene
 		TextView title = (TextView) findViewById(R.id.entete);
 		TextView body = (TextView) findViewById(R.id.articleContenu);
 		title.setText(notif.getTitre());
+		title.setTextColor(getResources().getColor(R.color.bleu_cartel));
+		title.setTextSize(18);
 		body.setText(notif.getBody());
 	}
 

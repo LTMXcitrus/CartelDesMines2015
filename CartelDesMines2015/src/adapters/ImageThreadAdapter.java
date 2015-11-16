@@ -3,18 +3,17 @@ package adapters;
 import java.util.List;
 
 import loaders.MyImageLoaderCache;
-import cartel.mines.nantes2015.R;
-import beans.Image;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.provider.ContactsContract.CommonDataKinds.Im;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import beans.Image;
+import cartel.mines.nantes2015.R;
 
 public class ImageThreadAdapter extends ArrayAdapter<Image>{
 

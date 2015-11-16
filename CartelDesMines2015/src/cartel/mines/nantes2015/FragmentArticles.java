@@ -1,12 +1,9 @@
 package cartel.mines.nantes2015;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 import loaders.ArticlesLoader;
-import loaders.ResultatsLoader;
-import beans.Article;
 import tools.ArticlesImagesLoaderListener;
 import tools.ArticlesLoaderListener;
 import adapters.ArticlesListAdapter;
@@ -23,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import beans.Article;
 
 public class FragmentArticles extends ListFragment implements ArticlesImagesLoaderListener, ArticlesLoaderListener{
 	

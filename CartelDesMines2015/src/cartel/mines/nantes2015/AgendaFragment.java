@@ -1,6 +1,7 @@
 package cartel.mines.nantes2015;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -97,7 +98,22 @@ public class AgendaFragment extends Fragment implements PlanningOnLoadListener{
 			public void run() {
 				
 				list.setAdapter(expandableAdapter);
-				list.expandGroup(3);
+				Calendar c = Calendar.getInstance();
+				int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+				switch(dayOfMonth){
+				case 14:
+					list.expandGroup(0);
+					break;
+				case 12:
+					list.expandGroup(2);
+					break;
+				case 13:
+					list.expandGroup(1);
+					break;
+				default:
+					list.expandGroup(3);
+				}
+				
 				list.setOnChildClickListener(new OnChildClickListener() {
 					
 					@Override

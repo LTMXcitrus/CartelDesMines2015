@@ -3,20 +3,18 @@ package cartel.mines.nantes2015;
 import java.util.ArrayList;
 
 import adapters.ExpandableMatchesListAdapter;
-import adapters.ResultatsListAdapter;
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.ExpandableListView;
-import beans.Match;
 import beans.Resultat;
 
 public class MatchesParSportsActivity extends Activity{
 	
 	ExpandableListView list;
 	
+	@SuppressWarnings("unchecked")
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_resultats);

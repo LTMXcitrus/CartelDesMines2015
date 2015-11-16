@@ -5,9 +5,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.graphics.BitmapFactory;
 import tools.ArticleImageGrandeLoaderListener;
 

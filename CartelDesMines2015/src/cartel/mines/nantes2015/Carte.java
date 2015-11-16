@@ -74,35 +74,36 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 		actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.bleu_cartel)));
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		if(!Accueil.isDeviceConnected(this)){
-			
-			notConnectedDialog(this);
-			
-		}else{
 
-			MarkerLoader getMarkers = null;
+			notConnectedDialog(this);
+
+		}else{
 			try {
+				MarkerLoader getMarkers = null;
+
 				getMarkers = new MarkerLoader(new URL("http://cartel2015.com/fr/perso/webservices/static/poi.json"), this);
+
+				getMarkers.start();
+
+				map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+				map.setMyLocationEnabled(true);
+				map.animateCamera(CameraUpdateFactory.newLatLngBounds(getAboveNantes(),400,400,1));
+
+				sportsPoiVisibility = (Button) findViewById(R.id.sportsvisibility);
+				sportsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.SPORT));
+				repasPoiVisibity = (Button) findViewById(R.id.repasvisibility);
+				repasPoiVisibity.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.SOIREE));
+				logementsPoiVisibility = (Button) findViewById(R.id.logementsvisibility);
+				logementsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.LOGEMENT));
+
+				emptyList = (TextView) findViewById(R.id.empty_list_item_search_list);
+				emptyList.setVisibility(View.GONE);
+
+				markerSearchResultsList =(ListView) findViewById(R.id.markerSearchResultsList);
+				markerSearchResultsList.setVisibility(View.GONE);
 			} catch (MalformedURLException e) {
 				System.out.println(e);
 			}
-			getMarkers.start();
-
-			map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-			map.setMyLocationEnabled(true);
-			map.animateCamera(CameraUpdateFactory.newLatLngBounds(getAboveNantes(),400,400,1));
-
-			sportsPoiVisibility = (Button) findViewById(R.id.sportsvisibility);
-			sportsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.SPORT));
-			repasPoiVisibity = (Button) findViewById(R.id.repasvisibility);
-			repasPoiVisibity.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.SOIREE));
-			logementsPoiVisibility = (Button) findViewById(R.id.logementsvisibility);
-			logementsPoiVisibility.setOnClickListener(new PoiVisibilityListener(PoiVisibilityListener.LOGEMENT));
-
-			emptyList = (TextView) findViewById(R.id.empty_list_item_search_list);
-			emptyList.setVisibility(View.GONE);
-
-			markerSearchResultsList =(ListView) findViewById(R.id.markerSearchResultsList);
-			markerSearchResultsList.setVisibility(View.GONE);
 		}
 	}
 
@@ -247,15 +248,6 @@ public class Carte extends ActionBarActivity implements AsyncListener{
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	private void hideKeyboard() {   
-		// Check if no view has focus:
-		View view = this.getCurrentFocus();
-		if (view != null) {
-			InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-			inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
-		}
 	}
 
 	private class PoiVisibilityListener implements View.OnClickListener{

@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import loaders.ClassementLoader;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import loaders.ClassementLoader;
-import loaders.ResultatsLoader;
-import beans.Classement;
 import tools.ClassementListener;
 import adapters.ClassementAdapter;
 import android.app.ProgressDialog;
@@ -31,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import beans.Classement;
 
 public class FragmentClassements extends ListFragment implements ClassementListener{
 

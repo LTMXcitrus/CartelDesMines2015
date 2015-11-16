@@ -2,15 +2,10 @@ package cartel.mines.nantes2015;
 
 import java.util.ArrayList;
 
+import loaders.GetMatchesOfDelegation;
+import loaders.ResultatsDelegationLoader;
 import tools.MatchesFilteredListener;
 import tools.SportsLoaderListener;
-import loaders.GetMatchesOfDelegation;
-import loaders.ResultatsLoader;
-import loaders.ResultatsDelegationLoader;
-import beans.Course;
-import beans.Match;
-import beans.Resultat;
-import adapters.ResultatsListAdapter;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -24,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import beans.Resultat;
 
 public class FragmentResultatsDelegation extends ListFragment implements SportsLoaderListener, MatchesFilteredListener{
 

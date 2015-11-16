@@ -3,16 +3,11 @@ package loaders;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import beans.Notification;
-import android.graphics.BitmapFactory;
 import tools.ImageLoaderListener;
+import android.graphics.BitmapFactory;
+import beans.Notification;
 
 public class ImageLoader extends Thread{
 

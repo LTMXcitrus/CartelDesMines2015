@@ -1,6 +1,5 @@
 package cartel.mines.nantes2015;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -11,11 +10,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -25,26 +21,21 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 public class Accueil extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, OnBackStackChangedListener{
 
 
-	private static final int CARTEL2015=0;
 	private static final int VITRINE=1;
 	private static final int CARTE=2;
 	private static final int PLANNING=3;
-	private static final int RESULTATS=4;
 	private static final int MATCHS=5;
 	private static final int PAR_SPORT=6;
 	private static final int PAR_DELEGATION=7;
 	private static final int CLASSEMENT=8;
-	private static final int NEWS=9;
 	private static final int ACTUALITES=10;
 	private static final int PICTURES=11;
 	private static final int MEDIASHARE=12;
-	private static final int AUTRES=13;
 	private static final int SPONSORS=14;
 	private static final int REGLAGES=15;
 	private static final int A_PROPOS=16;

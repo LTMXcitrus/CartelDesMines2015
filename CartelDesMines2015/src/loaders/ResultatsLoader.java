@@ -1,16 +1,13 @@
 package loaders;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.CharsetUtils;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +15,6 @@ import org.json.JSONObject;
 
 import tools.ResultatsListener;
 import android.util.Log;
-import beans.Classement;
 import beans.Course;
 import beans.Match;
 import beans.Resultat;

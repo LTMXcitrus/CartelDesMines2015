@@ -28,9 +28,9 @@ public class MemoryCache {
         setLimit(Runtime.getRuntime().maxMemory()/4);
     }
      
-    public void setLimit(long new_limit){
+    public void setLimit(long newlimit){
          
-        limit=new_limit;
+        limit=newlimit;
         Log.i(TAG, "MemoryCache will use up to "+limit/1024./1024.+"MB");
     }
  
